@@ -1,0 +1,73 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "task manager app",
+  "main": "dist/index.js",
+  "bin": {
+    "server": "dist/bin/server.js"
+  },
+  "scripts": {
+    "start": "NODE_ENV=development npx nodemon --exec babel-node ./server/bin/server.js",
+    "test": "jest",
+    "build": "NODE_ENV=production babel ./server -d dist --source-maps inline"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Romez/backend-project-lvl4.git"
+  },
+  "author": "Roman Ushakov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Romez/backend-project-lvl4/issues"
+  },
+  "engines": {
+    "node": "12.x"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "make lint && make test"
+    }
+  },
+  "homepage": "https://github.com/Romez/backend-project-lvl4#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.8.4",
+    "@babel/node": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "autoprefixer": "^9.7.4",
+    "babel-eslint": "^10.0.3",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jest": "^23.7.0",
+    "husky": "^4.2.1",
+    "jest": "^25.1.0",
+    "node-sass": "^4.13.1",
+    "nodemon": "^2.0.2",
+    "postcss-loader": "^3.0.0",
+    "prettier": "^1.19.1",
+    "sass-loader": "^8.0.2",
+    "style-loader": "^1.1.3",
+    "supertest": "^4.0.2",
+    "webpack-cli": "^3.3.10"
+  },
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
+    "jquery": "^3.4.1",
+    "koa": "^2.11.0",
+    "koa-pug": "^4.0.3",
+    "koa-router": "^8.0.7",
+    "koa-static": "^5.0.0",
+    "koa-webpack": "^5.3.0",
+    "popper.js": "^1.16.1",
+    "rollbar": "^2.14.4",
+    "webpack": "^4.41.5"
+  }
+}

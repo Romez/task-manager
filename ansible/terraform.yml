@@ -1,0 +1,5 @@
+- hosts: localhost
+  tasks:
+    - template:
+        src: secrets.auto.tfvars.j2
+        dest: '../terraform/secrets.auto.tfvars'

@@ -1,0 +1,12 @@
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - pip:
+        name:
+          - docker
+          - docker-py
+
+    - template:
+        src: environment.j2
+        dest: ../.env
+      tags: env

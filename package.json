@@ -7,9 +7,9 @@
     "server": "dist/bin/server.js"
   },
   "scripts": {
-    "start": "NODE_ENV=development npx nodemon --exec babel-node ./server/bin/server.js",
+    "start": "make start",
     "test": "jest",
-    "build": "NODE_ENV=production babel ./server -d dist --source-maps inline"
+    "build": "make build"
   },
   "repository": {
     "type": "git",
@@ -58,6 +58,7 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "@sentry/node": "^5.15.5",
     "bootstrap": "^4.4.1",
     "dotenv": "^8.2.0",
     "jquery": "^3.4.1",
@@ -67,7 +68,6 @@
     "koa-static": "^5.0.0",
     "koa-webpack": "^5.3.0",
     "popper.js": "^1.16.1",
-    "rollbar": "^2.14.4",
     "webpack": "^4.41.5"
   }
 }

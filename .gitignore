@@ -6,3 +6,4 @@ secrets.auto.tfvars
 *.tfstate
 dist
 public
+database.sqlite

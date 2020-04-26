@@ -1,14 +1,16 @@
-dev-env:
-	ansible-playbook ansible/dev.yml -i ansible/dev
-
 build:
 	rm -rf dist
-	rm -rf public
 	npx webpack
-	npm run build
+	NODE_ENV=production npx babel server -d dist --source-maps inline
 
-run:
-	npm start
+start:
+	heroku local -f Procfile.dev
+
+start-backend:
+	npx nodemon --exec npx babel-node server/bin/server.js
+
+start-frontend:
+	npx webpack-dev-server
 
 lint:
 	npx eslint .
@@ -16,8 +18,11 @@ lint:
 test:
 	npm test
 
-terraform-vars:
-	ansible-playbook ansible/terraform.yml -i ansible/prod -vv --ask-vault-pass
+deploy:
+	git push heroku
+
+make install:
+	npm ci
 
 deploy:
 	git push heroku

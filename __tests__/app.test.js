@@ -1,15 +1,27 @@
 import request from 'supertest';
+import matchers from 'jest-supertest-matchers';
 
-import createApp from '../server/app';
+import app from '../server/app';
 
 describe('test arequestpp', () => {
-  const app = createApp().listen();
+  let server;
 
-  it('should runrequest app', async () => {
-    const res = await request(app).get('/');
-
-    expect(res.status).toBe(200);
+  beforeAll(() => {
+    expect.extend(matchers);
   });
 
-  app.close();
+  beforeEach(() => {
+    server = app().listen();
+  });
+
+  it('should runrequest app', async () => {
+    const res = await request(server).get('/');
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  afterEach((done) => {
+    server.close();
+    done();
+  });
 });

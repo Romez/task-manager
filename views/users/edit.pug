@@ -1,0 +1,11 @@
+extends /layout/application.pug
+
+block title
+  h3= t('users.edit.title', user)
+
+block content
+  +formFor()(action=urlFor('updateUser', { id: user.id }) method='post')
+    +input(user, 'firstName', t('users.form.firstName'))(type="text")
+    +input(user, 'lastName', t('users.form.lastName'))(type="text")
+    input(type="hidden" name="_method" value="patch")
+    +submit(user)(value=t('users.form.submit'))

@@ -1,0 +1,12 @@
+extends /layout/application.pug
+
+block title
+  h3= t('users.new.title')
+
+block content
+  +formFor()(action=urlFor('users') method='post')
+    +input(user, 'firstName', t('users.form.firstName'), errors)(type="text")
+    +input(user, 'lastName', t('users.form.lastName'), errors)(type="text")
+    +input(user, 'email', t('users.form.email'), errors)(type="text")
+    +input(user, 'password', t('users.form.password'), errors)(type="password")
+    +submit(user)(value=t('users.form.submit'))

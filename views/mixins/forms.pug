@@ -1,0 +1,24 @@
+mixin formFor(entity = null)
+  form&attributes(attributes)
+    block
+
+mixin input(entity, propertyName, label, errors = [])
+  - error = errors.find((error) => error.property === propertyName)
+  .form-group(class=(errors[propertyName] && 'has-danger'))
+    label= label
+    input(
+      name=propertyName
+      class='form-control'
+      value=_.get(entity, propertyName, '')
+    )&attributes(attributes)
+    if error
+      .form-control-feedback= Object.values(error.constraints).join('. ')
+
+mixin submit(form = null)
+  .form-group
+    input(class='btn btn-success' type='submit')&attributes(attributes)
+
+mixin buttonTo(action, method)
+  form(action=action, method="post")
+    input(name="_method" type="hidden" value=method)
+    input(type='submit')&attributes(attributes)

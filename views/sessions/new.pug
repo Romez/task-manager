@@ -1,0 +1,10 @@
+extends /layout/application
+
+block title
+  h3= t('sessions.new.title')
+
+block content
+  +formFor()(action=urlFor('session') method='post')
+    +input(signInForm, 'email', t('sessions.new.email'), errors)(type="text")
+    +input(signInForm, 'password', t('sessions.new.password'), errors)(type="password")
+    +submit(signInForm)(value=t('sessions.new.submit'))

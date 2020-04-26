@@ -1,0 +1,10 @@
+extends /layout/application
+
+block title
+  h3= t('users.index.title')
+
+  each user in users
+    .card.mt-2
+      .card-body
+        div= user.fullName
+        div= user.email

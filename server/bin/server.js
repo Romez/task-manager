@@ -18,10 +18,9 @@ const run = async () => {
     console.log(`Running on port ${port}`);
   });
 
-  process.on('SIGINT', async () => {
-    await connection.close();
-
-    app.close(() => {
+  process.on('SIGINT', () => {
+    app.close(async () => {
+      await connection.close();
       process.exit(0);
     });
   });

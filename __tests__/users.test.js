@@ -39,7 +39,7 @@ describe('test users', () => {
   });
 
   it('should show edit user form', async () => {
-    const res = await request(server).get('/users/1/edit');
+    const res = await request(server).get('/users/1/edit').set({ cookie: authCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -72,6 +72,18 @@ describe('test users', () => {
 
     const user = await connection.getRepository('User').findOne({ id: 1 });
     expect(user.firstName).toBe('Ted');
+
+    expect(res).toHaveHTTPStatus(302);
+  });
+
+  it('should remove user', async () => {
+    const res = await request(server)
+      .post('/users/1')
+      .send({ _method: 'delete' })
+      .set({ cookie: authCookies });
+
+    const user = await connection.getRepository('User').findOne({ id: 1 });
+    expect(user).toBeFalsy();
 
     expect(res).toHaveHTTPStatus(302);
   });

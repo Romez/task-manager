@@ -20,6 +20,10 @@ export default (router) => {
     const { id } = ctx.params;
     const user = await ctx.orm.getRepository(User).findOne({ id });
 
+    if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
+      ctx.throw(404);
+    }
+
     await ctx.render('users/edit', { user });
   });
 
@@ -45,20 +49,38 @@ export default (router) => {
 
   router.patch('updateUser', '/users/:id', async (ctx) => {
     const { id } = ctx.params;
-    const userRepository = ctx.orm.getRepository(User);
-    const userBefore = await userRepository.findOne(id);
-    const userAfter = userRepository.merge(userBefore, ctx.request.body);
 
-    if (!ctx.state.isSignedIn() || userBefore.id !== ctx.session.userId) {
+    const userRepository = ctx.orm.getRepository(User);
+
+    const userBefore = await userRepository.findOne({ id });
+    if (userBefore.id !== ctx.session.userId) {
       ctx.throw(404);
     }
 
+    const userAfter = userRepository.merge(userBefore, ctx.request.body);
+
     const errors = await validate(userAfter);
     if (!_.isEmpty(errors)) {
-      await ctx.render(router.url('editUser', { id: 1 }), { user: userBefore, errors });
+      await ctx.render(router.url('editUser', { id }), { user: userBefore, errors });
     }
 
     await userRepository.save(userAfter);
-    ctx.redirect(router.url('editUser', { id: 1 }));
+    ctx.flash.set(i18next.t('flash.users.update.success'));
+    ctx.redirect(router.url('editUser', { id }));
+  });
+
+  router.delete('deleteUser', '/users/:id', async (ctx) => {
+    const { id } = ctx.params;
+    const userRepository = ctx.orm.getRepository(User);
+    const user = await userRepository.findOne({ id });
+
+    if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
+      ctx.throw(404);
+    }
+
+    await userRepository.remove(user);
+    ctx.session = {};
+
+    return ctx.redirect(router.url('users'));
   });
 };

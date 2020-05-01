@@ -5,6 +5,7 @@ module.exports = {
       home: 'Home',
       users: 'Users',
       settings: 'Settings',
+      signOut: 'Sign out ({{email}})',
     },
     sessions: {
       new: {
@@ -22,12 +23,15 @@ module.exports = {
         title: 'Users',
         email: 'Email',
         fullName: 'Full name',
+        edit: 'Edit',
+        delete: 'Delete',
       },
       new: {
         title: 'Sign Up',
       },
       edit: {
-        title: 'User edit {{email}}',
+        title: 'Edit user {{email}}',
+        success: 'User was updated',
       },
       form: {
         firstName: 'First name',
@@ -43,6 +47,9 @@ module.exports = {
         create: {
           error: 'User was not sign up',
           success: 'User was sign up',
+        },
+        update: {
+          success: 'User updated',
         },
       },
       sessions: {

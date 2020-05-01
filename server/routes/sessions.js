@@ -19,7 +19,7 @@ export default (router) => {
     }
 
     ctx.flash.set(i18next.t('flash.sessions.create.error'));
-    return ctx.render(router.url('signIn', { signInForm: ctx.request.body }));
+    return ctx.render('sessions/new', { signInForm: { email } });
   });
 
   router.delete('/sessions', (ctx) => {

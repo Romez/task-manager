@@ -12,10 +12,13 @@ import flash from 'koa-flash-simple';
 import koaLogger from 'koa-logger';
 import i18next from 'i18next';
 import _ from 'lodash';
+import errorHandler from 'koa-better-error-handler';
+import koa404Handler from 'koa-404-handler';
 
 import config from '../webpack.config';
 import addRoutes from './routes';
 import en from './locales/en';
+import { User, Guest } from './entity';
 
 const setupLocalization = () => {
   i18next.init({
@@ -27,7 +30,13 @@ const setupLocalization = () => {
 
 const createApp = (connection) => {
   const app = new Koa();
+
+  app.context.onerror = errorHandler;
+  app.use(koa404Handler);
+
   const router = new Router();
+  app.use(koaLogger());
+
   app.use(koaLogger());
 
   Sentry.init({ dsn: process.env.SENTRY });
@@ -47,10 +56,16 @@ const createApp = (connection) => {
   app.use(session(app));
   app.use(flash());
   app.use(async (ctx, next) => {
-    ctx.state = {
-      flash: ctx.flash,
-      isSignedIn: () => ctx.session.userId !== undefined,
-    };
+    let currentUser;
+
+    if (ctx.session.userId) {
+      currentUser = await ctx.orm.getRepository(User).findOne({ id: ctx.session.userId });
+    } else {
+      currentUser = new Guest();
+    }
+
+    ctx.state = { flash: ctx.flash, currentUser };
+
     await next();
   });
   app.use(bodyParser());
@@ -86,7 +101,7 @@ const createApp = (connection) => {
     locals: [],
     helperPath: [{
       urlFor: (...args) => router.url(...args),
-      t: (key) => i18next.t(key),
+      t: (key, params) => i18next.t(key, params),
       _,
     }],
   });

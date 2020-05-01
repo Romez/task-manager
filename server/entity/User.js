@@ -22,5 +22,7 @@ class User {
 
   @Column('varchar', { nullable: true })
   lastName = '';
+
+  isGuest = false;
 }
 export default User;

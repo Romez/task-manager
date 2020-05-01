@@ -71,6 +71,8 @@
     "i18next": "^19.4.3",
     "jquery": "^3.4.1",
     "koa": "^2.11.0",
+    "koa-404-handler": "0.0.2",
+    "koa-better-error-handler": "^3.0.5",
     "koa-bodyparser": "^4.3.0",
     "koa-flash-simple": "0.0.3",
     "koa-generic-session": "^2.0.4",

@@ -28,7 +28,7 @@ describe('test users', () => {
     authCookies = res.header['set-cookie'];
   });
 
-  it('should new user', async () => {
+  it('should show new user', async () => {
     const res = await request(server).get('/users/new');
     expect(res).toHaveHTTPStatus(200);
   });

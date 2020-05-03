@@ -5,6 +5,7 @@ module.exports = {
       home: 'Home',
       users: 'Users',
       settings: 'Settings',
+      taskStatuses: 'Task Statuses',
       signOut: 'Sign out ({{email}})',
     },
     sessions: {
@@ -28,18 +29,64 @@ module.exports = {
       },
       new: {
         title: 'Sign Up',
+        form: {
+          submit: 'Submit',
+          delete: 'Delete',
+        },
       },
       edit: {
         title: 'Edit user {{email}}',
         success: 'User was updated',
+        form: {
+          submit: 'Submit',
+          delete: 'Delete',
+        },
       },
-      form: {
-        firstName: 'First name',
-        lastName: 'Last name',
-        email: 'Email',
-        password: 'Password',
-        submit: 'Submit',
-        delete: 'Delete',
+    },
+    taskStatuses: {
+      new: {
+        title: 'Create task status',
+        form: {
+          submit: 'Submit',
+        },
+      },
+      index: {
+        title: 'Task statuses',
+        create: 'Create new task status',
+        edit: 'Edit',
+        delete: 'Remove',
+      },
+      edit: {
+        title: 'Edit Task Status: {{name}}',
+        form: {
+          submit: 'Submit',
+        },
+      },
+    },
+    entity: {
+      TaskStatus: {
+        attributes: {
+          name: 'Status name',
+        },
+        validates: {
+          name: {
+            unique: 'Name "{{name}}" already exists',
+          },
+        },
+      },
+      User: {
+        attributes: {
+          firstName: 'First name',
+          lastName: 'Last name',
+          email: 'Email',
+          password: 'Password',
+        },
+        validates: {
+          email: {
+            unique: 'Email "{{name}}" already exists',
+            isEmail: '"{{email}}" is not a valid email',
+          },
+        },
       },
     },
     flash: {
@@ -49,7 +96,7 @@ module.exports = {
           success: 'User was sign up',
         },
         update: {
-          success: 'User updated',
+          success: 'User was updated',
         },
       },
       sessions: {
@@ -59,6 +106,14 @@ module.exports = {
         },
         delete: {
           success: 'User signed out',
+        },
+      },
+      taskStatuses: {
+        update: {
+          success: 'Task status was updated',
+        },
+        delete: {
+          success: 'Task status "{{name}}" was deleted',
         },
       },
     },

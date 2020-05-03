@@ -1,0 +1,15 @@
+extends /layout/application
+
+block title
+  h3= t('taskStatuses.index.title')
+
+  a.btn.btn-success(href=(urlFor('newTaskStatus')))= t('taskStatuses.index.create')
+
+  each status in taskStatuses
+    .card.mt-2
+      .card-body.d-flex.justify-content-between
+        div
+          div= status.name
+        div.d-flex
+          a.btn.btn-success.btn-sm.mr-1(href=urlFor('editTaskStatus', { id: status.id }))= t('taskStatuses.index.edit')
+          +buttonTo(urlFor('removeTaskStatus', { id: status.id }), 'delete')(class="btn btn-danger btn-sm" value=t('taskStatuses.index.delete'))

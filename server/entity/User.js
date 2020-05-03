@@ -1,5 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
+import i18next from 'i18next';
+
 import IsUnique from '../validators/IsUnique';
 
 @Entity()
@@ -8,9 +10,9 @@ class User {
   id = null;
 
   @Column('varchar', { unique: true })
-  @IsEmail()
+  @IsUnique({ message: (args) => i18next.t('entity.User.validates.email.unique', { name: args.value }) })
+  @IsEmail({}, { message: (args) => i18next.t('entity.User.validates.email.isEmail', { email: args.value }) })
   @IsNotEmpty()
-  @IsUnique({ message: 'Email $value already exists. Choose another email.' })
   email = '';
 
   @Column('varchar')

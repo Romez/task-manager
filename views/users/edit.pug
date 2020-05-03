@@ -5,7 +5,7 @@ block title
 
 block content
   +formFor()(action=urlFor('updateUser', { id: user.id }) method='post')
-    +input(user, 'firstName', t('users.form.firstName'))(type="text")
-    +input(user, 'lastName', t('users.form.lastName'))(type="text")
+    +input(user, 'firstName', t('entity.User.attributes.firstName'))
+    +input(user, 'lastName', t('entity.User.attributes.lastName'))
     input(type="hidden" name="_method" value="patch")
-    +submit(user)(value=t('users.form.submit'))
+    +submit(user)(value=t('users.edit.form.submit'))

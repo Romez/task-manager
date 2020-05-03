@@ -11,13 +11,13 @@ const IsUnique = (validationOptions) => (object, propertyName) => {
       async validate(value, args) {
         const repository = getRepository(args.targetName);
 
-        if (args.object.id !== null) {
+        const entity = await repository.findOne({ where: { [args.property]: value } });
+
+        if (!entity) {
           return true;
         }
 
-        const entity = await repository.findOne({ where: { [args.property]: value } });
-
-        return !entity;
+        return entity.id === args.object.id;
       },
     },
   });

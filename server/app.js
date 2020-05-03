@@ -37,8 +37,6 @@ const createApp = (connection) => {
   const router = new Router();
   app.use(koaLogger());
 
-  app.use(koaLogger());
-
   Sentry.init({ dsn: process.env.SENTRY });
 
   app.use(async (_ctx, next) => {

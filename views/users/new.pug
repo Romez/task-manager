@@ -5,8 +5,8 @@ block title
 
 block content
   +formFor()(action=urlFor('users') method='post')
-    +input(user, 'firstName', t('users.form.firstName'), errors)(type="text")
-    +input(user, 'lastName', t('users.form.lastName'), errors)(type="text")
-    +input(user, 'email', t('users.form.email'), errors)(type="text")
-    +input(user, 'password', t('users.form.password'), errors)(type="password")
-    +submit(user)(value=t('users.form.submit'))
+    +input(user, 'firstName', t('entity.User.attributes.firstName'), errors)
+    +input(user, 'lastName', t('entity.User.attributes.lastName'), errors)
+    +input(user, 'email', t('entity.User.attributes.email'), errors)
+    +input(user, 'password', t('entity.User.attributes.password'), errors)(type="password")
+    +submit(user)(value=t('users.new.form.submit'))

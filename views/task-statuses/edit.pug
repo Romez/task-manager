@@ -1,0 +1,10 @@
+extends /layout/application.pug
+
+block title
+  h3= t('taskStatuses.edit.title', taskStatus)
+
+block content
+  +formFor()(action=urlFor('updateTaskStatus', { id: taskStatus.id }) method='post')
+    +input(taskStatus, 'name', t('entity.TaskStatus.attributes.name'), errors)
+    input(type="hidden" name="_method" value="patch")
+    +submit(taskStatus)(value=t('taskStatuses.edit.form.submit'))

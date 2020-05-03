@@ -12,7 +12,7 @@ mixin input(entity, propertyName, label, errors = [])
       value=_.get(entity, propertyName, '')
     )&attributes(attributes)
     if error
-      .form-control-feedback= Object.values(error.constraints).join('. ')
+      .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')
 
 mixin submit(form = null)
   .form-group

@@ -52,7 +52,7 @@ export default (router) => {
 
     const userRepository = ctx.orm.getRepository(User);
 
-    const userBefore = await userRepository.findOne({ id });
+    const userBefore = await userRepository.findOneOrFail({ id });
     if (userBefore.id !== ctx.session.userId) {
       ctx.throw(404);
     }

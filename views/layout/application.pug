@@ -18,6 +18,7 @@ html(lang="en")
             a.nav-link(href=urlFor('users'))=t('menu.users')
           if (!currentUser.isGuest)
             a.nav-link(href=urlFor('taskStatuses'))=t('menu.taskStatuses')
+            a.nav-link(href=urlFor('tasks'))=t('menu.tasks')
 
         ul.navbar-nav
           if (!currentUser.isGuest)

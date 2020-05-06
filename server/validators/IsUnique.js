@@ -11,7 +11,7 @@ const IsUnique = (validationOptions) => (object, propertyName) => {
       async validate(value, args) {
         const repository = getRepository(args.targetName);
 
-        const entity = await repository.findOne({ where: { [args.property]: value } });
+        const entity = await repository.findOne({ [args.property]: value, deletedAt: null });
 
         if (!entity) {
           return true;
@@ -22,6 +22,5 @@ const IsUnique = (validationOptions) => (object, propertyName) => {
     },
   });
 };
-
 
 export default IsUnique;

@@ -6,3 +6,7 @@ items:
     passwordDigest: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8' # password
     firstName: 'Vasily'
     lastName: 'Pupkin'
+  removedUser:
+    id: 2
+    email: 'removed@mail.com'
+    passwordDigest: '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8' # password

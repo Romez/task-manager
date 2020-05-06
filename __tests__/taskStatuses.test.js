@@ -40,20 +40,14 @@ describe('test taskStatuses', () => {
 
   it('should create status', async () => {
     const payload = { name: 'inProgress' };
-    const res = await request(server).post('/task-statuses').send(payload);
+    const res = await request(server)
+      .post('/task-statuses')
+      .send(payload);
 
     const status = await connection.getRepository('TaskStatus').findOne({ name: payload.name });
     expect(status).toBeTruthy();
 
     expect(res).toHaveHTTPStatus(302);
-  });
-
-  it('should delete status', async () => {
-    const res = await request(server).post('/task-statuses/1').send({ _method: 'delete' });
-    expect(res).toHaveHTTPStatus(302);
-
-    const taskStatus = await connection.getRepository('TaskStatus').findOne({ name: 'new' });
-    expect(taskStatus).toBeFalsy();
   });
 
   it('should show edit form', async () => {
@@ -69,6 +63,16 @@ describe('test taskStatuses', () => {
 
     const taskStatus = await connection.getRepository('TaskStatus').findOneOrFail({ id: 1 });
     expect(taskStatus.name).toBe('finished');
+  });
+
+  it('should delete status', async () => {
+    const res = await request(server)
+      .post('/task-statuses/1')
+      .send({ _method: 'delete' });
+    expect(res).toHaveHTTPStatus(302);
+
+    const taskStatus = await connection.getRepository('TaskStatus').findOne({ name: 'new' });
+    expect(taskStatus).toBeFalsy();
   });
 
   afterEach(async () => {

@@ -39,7 +39,9 @@ describe('test users', () => {
   });
 
   it('should show edit user form', async () => {
-    const res = await request(server).get('/users/1/edit').set({ cookie: authCookies });
+    const res = await request(server)
+      .get('/users/1/edit')
+      .set({ cookie: authCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -65,10 +67,13 @@ describe('test users', () => {
   });
 
   it('should update user', async () => {
-    const res = await request(server).post('/users/1').send({
-      _method: 'patch',
-      firstName: 'Ted',
-    }).set({ cookie: authCookies });
+    const res = await request(server)
+      .post('/users/1')
+      .send({
+        _method: 'patch',
+        firstName: 'Ted',
+      })
+      .set({ cookie: authCookies });
 
     const user = await connection.getRepository('User').findOne({ id: 1 });
     expect(user.firstName).toBe('Ted');

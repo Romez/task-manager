@@ -63,7 +63,7 @@ export default (router) => {
 
     const status = await statusRepository.findOneOrFail({ id });
 
-    await statusRepository.remove(status);
+    await statusRepository.softRemove(status);
 
     ctx.flash.set(i18next.t('flash.taskStatuses.delete.success', { name: status.name }));
     return ctx.redirect(router.url('taskStatuses'));

@@ -78,7 +78,7 @@ export default (router) => {
       ctx.throw(404);
     }
 
-    await userRepository.remove(user);
+    await userRepository.softRemove(user);
     ctx.session = {};
 
     return ctx.redirect(router.url('users'));

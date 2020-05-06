@@ -30,7 +30,9 @@ describe('test session', () => {
 
   it('should signIn', async () => {
     const payload = { email: 'user@mail.com', password: 'password' };
-    const res = await request(server).post('/sessions').send(payload);
+    const res = await request(server)
+      .post('/sessions')
+      .send(payload);
 
     expect(res.statusCode).toBe(302);
   });

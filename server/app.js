@@ -67,13 +67,14 @@ const createApp = (connection) => {
     await next();
   });
   app.use(bodyParser());
-  app.use(methodOverride((req) => {
-    // return req?.body?._method;
-    if (req.body && typeof req.body === 'object' && '_method' in req.body) {
-      return req.body._method; // eslint-disable-line
-    }
-    return null;
-  }));
+  app.use(
+    methodOverride((req) => {
+      if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+        return req.body._method; // eslint-disable-line
+      }
+      return null;
+    }),
+  );
 
   if (process.env.NODE_ENV === 'development') {
     koaWebpack({ config }).then((m) => app.use(m));
@@ -97,11 +98,13 @@ const createApp = (connection) => {
     noCache: process.env.NODE_ENV === 'development',
     basedir: path.join(__dirname, '..', 'views'),
     locals: [],
-    helperPath: [{
-      urlFor: (...args) => router.url(...args),
-      t: (key, params) => i18next.t(key, params),
-      _,
-    }],
+    helperPath: [
+      {
+        urlFor: (...args) => router.url(...args),
+        t: (key, params) => i18next.t(key, params),
+        _,
+      },
+    ],
   });
 
   pug.use(app);

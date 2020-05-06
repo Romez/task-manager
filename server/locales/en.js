@@ -6,6 +6,7 @@ module.exports = {
       users: 'Users',
       settings: 'Settings',
       taskStatuses: 'Task Statuses',
+      tasks: 'Tasks',
       signOut: 'Sign out ({{email}})',
     },
     sessions: {
@@ -63,7 +64,26 @@ module.exports = {
         },
       },
     },
+    tasks: {
+      index: {
+        title: 'Tasks',
+        create: 'Create new task',
+      },
+      new: {
+        title: 'New Task',
+        submit: 'Submit',
+      },
+    },
     entity: {
+      Task: {
+        attributes: {
+          name: 'Name',
+          description: 'Description',
+          status: 'Status',
+          assignedTo: 'Assigned to',
+          tags: 'Tags',
+        },
+      },
       TaskStatus: {
         attributes: {
           name: 'Status name',

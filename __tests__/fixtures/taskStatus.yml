@@ -1,5 +1,5 @@
 entity: TaskStatus
 items:
-  new:
+  taskStatusNew:
     id: 1
     name: new

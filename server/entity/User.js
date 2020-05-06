@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
 import i18next from 'i18next';
 
@@ -9,7 +9,7 @@ class User {
   @PrimaryGeneratedColumn()
   id = null;
 
-  @Column('varchar', { unique: true })
+  @Column('varchar')
   @IsUnique({ message: (args) => i18next.t('entity.User.validates.email.unique', { name: args.value }) })
   @IsEmail({}, { message: (args) => i18next.t('entity.User.validates.email.isEmail', { email: args.value }) })
   @IsNotEmpty()
@@ -24,6 +24,9 @@ class User {
 
   @Column('varchar', { nullable: true })
   lastName = '';
+
+  @DeleteDateColumn()
+  deletedAt = null;
 
   isGuest = false;
 }

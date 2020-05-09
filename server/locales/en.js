@@ -55,7 +55,7 @@ module.exports = {
         title: 'Task statuses',
         create: 'Create new task status',
         edit: 'Edit',
-        delete: 'Remove',
+        delete: 'Delete',
       },
       edit: {
         title: 'Edit Task Status: {{name}}',
@@ -68,6 +68,8 @@ module.exports = {
       index: {
         title: 'Tasks',
         create: 'Create new task',
+        edit: 'Edit',
+        delete: 'Delete',
       },
       new: {
         title: 'New Task',
@@ -80,6 +82,7 @@ module.exports = {
           name: 'Name',
           description: 'Description',
           status: 'Status',
+          creator: 'Creator',
           assignedTo: 'Assigned to',
           tags: 'Tags',
         },
@@ -100,12 +103,18 @@ module.exports = {
           lastName: 'Last name',
           email: 'Email',
           password: 'Password',
+          fullName: 'Full name',
         },
         validates: {
           email: {
             unique: 'Email "{{name}}" already exists',
             isEmail: '"{{email}}" is not a valid email',
           },
+        },
+      },
+      Guest: {
+        attributes: {
+          fullName: 'Full name',
         },
       },
     },
@@ -129,12 +138,18 @@ module.exports = {
         },
       },
       taskStatuses: {
+        create: {
+          success: 'Taks status created',
+        },
         update: {
           success: 'Task status was updated',
         },
         delete: {
           success: 'Task status "{{name}}" was deleted',
         },
+      },
+      task: {
+        create: 'Task created',
       },
     },
   },

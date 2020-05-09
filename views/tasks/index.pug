@@ -7,9 +7,29 @@ block title
 
   each task in tasks
     .card.mt-2
-      .card-body.d-flex.justify-content-between
-        div
-          div= task.name
-        div.d-flex
-          // a.btn.btn-success.btn-sm.mr-1(href=urlFor('editTaskStatus', { id: status.id }))= t('taskStatuses.index.edit')
-          // +buttonTo(urlFor('removeTaskStatus', { id: status.id }), 'delete')(class="btn btn-danger btn-sm" value=t('taskStatuses.index.delete'))
+      .card-body
+        h5.card-title= task.name
+        p.card-text= task.description
+
+      ul.list-group.list-group-flush
+        li.list-group-item.d-flex
+          strong.mr-1= t('entity.Task.attributes.creator')
+            =':'
+          = task.creator.email
+        li.list-group-item
+          strong.mr-1= t('entity.Task.attributes.status')
+            =':'
+          = task.status.name
+
+        li.list-group-item
+          strong.mr-1= t('entity.Task.attributes.assignedTo')
+            =':'
+          = task.assignedTo ? task.assignedTo.email : '-'
+        li.list-group-item
+          strong.mr-1= t('entity.Task.attributes.tags')
+            =':'
+          = task.tags.length > 0 ? task.tags.map(({ name }) => name)  : '-'
+        .card-footer
+          div.d-flex
+            a.btn.btn-success.btn-sm.mr-1(href=urlFor('editTask', { id: task.id }))= t('tasks.index.edit')
+            +buttonTo(urlFor('delteTask', { id: task.id }), 'delete')(class="btn btn-danger btn-sm" value=t('tasks.index.delete'))

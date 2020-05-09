@@ -32,4 +32,4 @@ block title
         .card-footer
           div.d-flex
             a.btn.btn-success.btn-sm.mr-1(href=urlFor('editTask', { id: task.id }))= t('tasks.index.edit')
-            +buttonTo(urlFor('delteTask', { id: task.id }), 'delete')(class="btn btn-danger btn-sm" value=t('tasks.index.delete'))
+            +buttonTo(urlFor('deleteTask', { id: task.id }), 'delete')(class="btn btn-danger btn-sm" value=t('tasks.index.delete'))

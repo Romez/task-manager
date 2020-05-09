@@ -13,10 +13,18 @@ const loadFixtures = async (connection) => {
   const fixtures = resolver.resolve(loader.fixtureConfigs);
   const builder = new Builder(connection, new Parser());
 
+  const entities = {};
   for (const fixture of fixturesIterator(fixtures)) {
     const entity = await builder.build(fixture);
-    await getRepository(entity.constructor.name).save(entity);
+    const entityName = entity.constructor.name;
+    const entitySaved = await getRepository(entity.constructor.name).save(entity);
+    if (!entities[entityName]) {
+      entities[entityName] = {};
+    }
+    entities[entityName][fixture.name] = entitySaved;
   }
+
+  return entities;
 };
 
 export default loadFixtures;

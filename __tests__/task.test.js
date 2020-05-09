@@ -10,6 +10,7 @@ describe('test tasks', () => {
   let server;
   let connection;
   let authCookies;
+  let fixtures;
 
   beforeAll(async () => {
     expect.extend(matchers);
@@ -17,7 +18,7 @@ describe('test tasks', () => {
 
   beforeEach(async () => {
     connection = await createConnection(ormconfig[process.env.NODE_ENV]);
-    await loadFixtures(connection);
+    fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
     const res = await request(server)
@@ -59,6 +60,16 @@ describe('test tasks', () => {
       assignedTo: { id: 1 },
       tags: [{ name: 'job' }, { name: 'buy' }, { name: 'fix' }],
     });
+  });
+
+  it('should delete task', async () => {
+    const { id } = fixtures.Task.task1;
+
+    const res = await request(server).delete(`/tasks/${id}`);
+    expect(res).toHaveHTTPStatus(302);
+
+    const task = await connection.getRepository('Task').findOne({ id });
+    expect(task).toBeFalsy();
   });
 
   afterEach(async () => {

@@ -11,6 +11,7 @@ describe('test users', () => {
   let server;
   let connection;
   let authCookies;
+  let fixtures;
 
   beforeAll(async () => {
     expect.extend(matchers);
@@ -18,7 +19,7 @@ describe('test users', () => {
 
   beforeEach(async () => {
     connection = await createConnection(ormconfig[process.env.NODE_ENV]);
-    await loadFixtures(connection);
+    fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
     const res = await request(server)
@@ -81,13 +82,14 @@ describe('test users', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
-  it('should remove user', async () => {
+  it('should delete user', async () => {
+    const { id } = fixtures.User.user1;
     const res = await request(server)
-      .post('/users/1')
+      .post(`/users/${id}`)
       .send({ _method: 'delete' })
       .set({ cookie: authCookies });
 
-    const user = await connection.getRepository('User').findOne({ id: 1 });
+    const user = await connection.getRepository('User').findOne({ id });
     expect(user).toBeFalsy();
 
     expect(res).toHaveHTTPStatus(302);

@@ -72,7 +72,7 @@ export default (router) => {
   router.delete('deleteUser', '/users/:id', async (ctx) => {
     const { id } = ctx.params;
     const userRepository = ctx.orm.getRepository(User);
-    const user = await userRepository.findOne({ id });
+    const user = await userRepository.findOneOrFail({ id });
 
     if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
       ctx.throw(404);

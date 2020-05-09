@@ -81,5 +81,16 @@ export default (router) => {
     return ctx.redirect(router.url('tasks'));
   });
 
-  router.delete('deleteTask', '/tasks/:id', async () => {});
+  router.delete('deleteTask', '/tasks/:id', async (ctx) => {
+    const { id } = ctx.params;
+
+    const taskRepository = ctx.orm.getRepository(Task);
+    const task = await taskRepository.findOneOrFail({ id });
+
+    await taskRepository.remove(task);
+
+    ctx.flash.set(i18next.t('flash.tasks.delete.success'));
+
+    return ctx.redirect(router.url('tasks'));
+  });
 };

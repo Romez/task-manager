@@ -148,8 +148,13 @@ module.exports = {
           success: 'Task status "{{name}}" was deleted',
         },
       },
-      task: {
-        create: 'Task created',
+      tasks: {
+        create: {
+          success: 'Task created',
+        },
+        delete: {
+          success: 'Task deleted',
+        },
       },
     },
   },

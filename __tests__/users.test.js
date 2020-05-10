@@ -83,7 +83,7 @@ describe('test users', () => {
   });
 
   it('should delete user', async () => {
-    const { id } = fixtures.User.user1;
+    const { id } = fixtures.User.user;
     const res = await request(server)
       .post(`/users/${id}`)
       .send({ _method: 'delete' })

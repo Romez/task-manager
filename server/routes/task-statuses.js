@@ -43,13 +43,14 @@ export default (router) => {
     const { id } = ctx.params;
     const statusRepository = ctx.orm.getRepository(TaskStatus);
 
-    const taskStatusBefore = await statusRepository.findOneOrFail({ id });
+    const taskStatusBefore = await statusRepository.findOneOrFail(id);
     const taskStatusAfter = statusRepository.merge(taskStatusBefore, ctx.request.body);
 
     const errors = await validate(taskStatusAfter);
+    console.log({ errors: errors[0] });
 
     if (!_.isEmpty(errors)) {
-      return ctx.render('task-statuses/edit', { taskStatus: taskStatusBefore, errors });
+      return ctx.render('task-statuses/edit', { taskStatus: taskStatusAfter, errors });
     }
 
     await statusRepository.save(taskStatusAfter);

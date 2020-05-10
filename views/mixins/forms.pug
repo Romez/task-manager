@@ -26,7 +26,7 @@ mixin select(entity, items, propertyName, label, errors = [])
       class='form-control'
     )&attributes(attributes)
       each item in items
-        option(value=item.id) #{item.name}
+        option(value=item.id selected=item.id === _.get(entity, [propertyName, 'id'])) #{item.name}
 
     if error
       .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')

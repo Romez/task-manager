@@ -1,10 +1,10 @@
 entity: Task
 items:
-  task1:
+  buyMilkTask:
     id: 1
-    name: 'set up project'
-    description: 'init project boilerplate'
-    status: '@taskStatusNew' 
-    creator: '@user1' 
-    assignedTo: '@user1' 
+    name: 'buy milk'
+    description: '3.2% fat'
+    status: '@taskStatusNew'
+    creator: '@user'
+    assignedTo: '@user'
     tags: null

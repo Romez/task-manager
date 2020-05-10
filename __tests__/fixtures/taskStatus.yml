@@ -3,3 +3,6 @@ items:
   taskStatusNew:
     id: 1
     name: new
+  taskStatusFinished:
+    id: 2
+    name: finished

@@ -75,6 +75,14 @@ module.exports = {
         title: 'New Task',
         submit: 'Submit',
       },
+      edit: {
+        title: 'Edit task: {{name}}',
+        success: 'Task was updated',
+        form: {
+          submit: 'Submit',
+          delete: 'Delete',
+        },
+      },
     },
     entity: {
       Task: {
@@ -154,6 +162,9 @@ module.exports = {
         },
         delete: {
           success: 'Task deleted',
+        },
+        update: {
+          success: 'Task was updated',
         },
       },
     },

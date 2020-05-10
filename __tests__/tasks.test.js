@@ -37,9 +37,9 @@ describe('test tasks', () => {
     const payload = {
       name: 'Buy milk',
       description: '3.2%',
-      status: 1,
-      assignedTo: 1,
-      tags: 'job, buy, fix',
+      status: fixtures.TaskStatus.taskStatusNew.id,
+      assignedTo: fixtures.User.user.id,
+      tags: [fixtures.Tag.job.name, fixtures.Tag.buy.name, 'fix'].join(', '),
     };
 
     const res = await request(server)
@@ -55,15 +55,52 @@ describe('test tasks', () => {
     expect(task).toMatchObject({
       name: payload.name,
       description: payload.description,
-      creator: { id: 1 },
-      status: { name: 'new' },
-      assignedTo: { id: 1 },
+      creator: fixtures.User.user,
+      status: fixtures.TaskStatus.taskStatusNew,
+      assignedTo: fixtures.User.user,
       tags: [{ name: 'job' }, { name: 'buy' }, { name: 'fix' }],
     });
   });
 
+  it('should show edit page', async () => {
+    const { id } = fixtures.Task.buyMilkTask;
+
+    const res = await request(server).get(`/tasks/${id}/edit`);
+    expect(res).toHaveHTTPStatus(200);
+  });
+
+  it('should update task', async () => {
+    const { id } = fixtures.Task.buyMilkTask;
+
+    const payload = {
+      name: 'buy meat',
+      description: 'beaf 0.5 kg',
+      status: fixtures.TaskStatus.taskStatusFinished.id,
+      assignedTo: '',
+      tags: [fixtures.Tag.buy.name, 'food'].join(','),
+    };
+
+    const res = await request(server)
+      .patch(`/tasks/${id}`)
+      .send(payload);
+    expect(res).toHaveHTTPStatus(302);
+
+    const task = await connection
+      .getRepository('Task')
+      .findOneOrFail({ id }, { relations: ['status', 'creator', 'assignedTo', 'tags'] });
+
+    expect(task).toMatchObject({
+      name: payload.name,
+      description: payload.description,
+      creator: fixtures.User.user,
+      status: fixtures.TaskStatus.taskStatusFinished,
+      assignedTo: null,
+      tags: [fixtures.Tag.buy, { name: 'food' }],
+    });
+  });
+
   it('should delete task', async () => {
-    const { id } = fixtures.Task.task1;
+    const { id } = fixtures.Task.buyMilkTask;
 
     const res = await request(server).delete(`/tasks/${id}`);
     expect(res).toHaveHTTPStatus(302);

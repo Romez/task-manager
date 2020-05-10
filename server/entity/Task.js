@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTable, JoinColumn } from 'typeorm';
 import i18next from 'i18next';
 import { IsNotEmpty } from 'class-validator';
 
@@ -24,6 +24,7 @@ class Task {
     () => TaskStatus,
     (status) => status.tasks,
   )
+  @JoinColumn()
   status;
 
   @ManyToOne(

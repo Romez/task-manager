@@ -8,7 +8,7 @@ class Tag {
   @PrimaryGeneratedColumn()
   id = null;
 
-  @Column('varchar')
+  @Column('varchar', { unique: true })
   @IsUnique()
   @IsNotEmpty()
   name = '';

@@ -10,6 +10,7 @@ import ormconfig from '../ormconfig';
 describe('test taskStatuses', () => {
   let server;
   let connection;
+  let fixtures;
   // let authCookies;
 
   beforeAll(async () => {
@@ -18,7 +19,7 @@ describe('test taskStatuses', () => {
 
   beforeEach(async () => {
     connection = await createConnection(ormconfig[process.env.NODE_ENV]);
-    await loadFixtures(connection);
+    fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
     // const res = await request(server)
@@ -56,13 +57,16 @@ describe('test taskStatuses', () => {
   });
 
   it('should update task status', async () => {
+    const { id } = fixtures.TaskStatus.taskStatusNew;
+
     const res = await request(server)
-      .patch('/task-statuses/1')
-      .send({ name: 'finished' });
+      .patch(`/task-statuses/${id}`)
+      .send({ name: 'testing' });
+
     expect(res).toHaveHTTPStatus(302);
 
-    const taskStatus = await connection.getRepository('TaskStatus').findOneOrFail({ id: 1 });
-    expect(taskStatus.name).toBe('finished');
+    const taskStatus = await connection.getRepository('TaskStatus').findOneOrFail(id);
+    expect(taskStatus.name).toBe('testing');
   });
 
   it('should delete status', async () => {

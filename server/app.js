@@ -14,6 +14,7 @@ import i18next from 'i18next';
 import _ from 'lodash';
 import errorHandler from 'koa-better-error-handler';
 import koa404Handler from 'koa-404-handler';
+import { middleware as paginateMiddleware } from 'koa-ctx-paginate';
 
 import config from '../webpack.config';
 import addRoutes from './routes';
@@ -35,6 +36,9 @@ const createApp = (connection) => {
   app.use(koa404Handler);
 
   const router = new Router();
+
+  app.use(paginateMiddleware(2, 50));
+
   app.use(koaLogger());
 
   Sentry.init({ dsn: process.env.SENTRY });
@@ -62,7 +66,7 @@ const createApp = (connection) => {
       currentUser = new Guest();
     }
 
-    ctx.state = { flash: ctx.flash, currentUser };
+    ctx.state = { ...ctx.state, flash: ctx.flash, currentUser };
 
     await next();
   });

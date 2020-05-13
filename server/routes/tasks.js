@@ -2,16 +2,21 @@ import { validate } from 'class-validator';
 import _ from 'lodash';
 import { In } from 'typeorm';
 import i18next from 'i18next';
+import * as paginate from 'koa-ctx-paginate';
 
 import { TaskStatus, Task, User, Tag } from '../entity';
 
 export default (router) => {
   router.get('tasks', '/tasks', async (ctx) => {
-    const tasks = await ctx.orm.getRepository(Task).find({
+    const [tasks, count] = await ctx.orm.getRepository(Task).findAndCount({
       relations: ['status', 'assignedTo', 'creator', 'tags'],
+      skip: ctx.paginate.skip,
+      take: ctx.query.limit,
     });
 
-    return ctx.render('tasks', { tasks });
+    const pageCount = Math.ceil(count / ctx.query.limit);
+
+    return ctx.render('tasks', { tasks, pageCount, pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page) });
   });
 
   router.get('newTask', '/tasks/new', async (ctx) => {

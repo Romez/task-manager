@@ -77,6 +77,7 @@
     "koa-404-handler": "0.0.2",
     "koa-better-error-handler": "^3.0.5",
     "koa-bodyparser": "^4.3.0",
+    "koa-ctx-paginate": "0.0.4",
     "koa-flash-simple": "0.0.3",
     "koa-generic-session": "^2.0.4",
     "koa-logger": "^3.2.1",

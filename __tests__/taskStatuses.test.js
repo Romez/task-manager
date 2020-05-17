@@ -1,7 +1,6 @@
 import request from 'supertest';
 import matchers from 'jest-supertest-matchers';
 import { createConnection } from 'typeorm';
-// import faker from 'faker';
 
 import loadFixtures from './loadFixtures';
 import getApp from '../server/app';
@@ -11,7 +10,7 @@ describe('test taskStatuses', () => {
   let server;
   let connection;
   let fixtures;
-  // let authCookies;
+  let authenticatedCookies;
 
   beforeAll(async () => {
     expect.extend(matchers);
@@ -22,20 +21,24 @@ describe('test taskStatuses', () => {
     fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
-    // const res = await request(server)
-    //   .post('/sessions')
-    //   .send({ email: 'user@mail.com', password: 'password' });
+    const res = await request(server)
+      .post('/sessions')
+      .send({ email: 'user@mail.com', password: 'password' });
 
-    // authCookies = res.header['set-cookie'];
+    authenticatedCookies = res.header['set-cookie'];
   });
 
   it('should show list of statuses', async () => {
-    const res = await request(server).get('/task-statuses');
+    const res = await request(server)
+      .get('/task-statuses')
+      .set({ cookie: authenticatedCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
   it('should show new status form', async () => {
-    const res = await request(server).get('/task-statuses/new');
+    const res = await request(server)
+      .get('/task-statuses/new')
+      .set({ cookie: authenticatedCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -43,6 +46,7 @@ describe('test taskStatuses', () => {
     const payload = { name: 'inProgress' };
     const res = await request(server)
       .post('/task-statuses')
+      .set({ cookie: authenticatedCookies })
       .send(payload);
 
     const status = await connection.getRepository('TaskStatus').findOne({ name: payload.name });
@@ -52,7 +56,10 @@ describe('test taskStatuses', () => {
   });
 
   it('should show edit form', async () => {
-    const res = await request(server).get('/task-statuses/1/edit');
+    const res = await request(server)
+      .get('/task-statuses/1/edit')
+      .set({ cookie: authenticatedCookies });
+
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -61,6 +68,7 @@ describe('test taskStatuses', () => {
 
     const res = await request(server)
       .patch(`/task-statuses/${id}`)
+      .set({ cookie: authenticatedCookies })
       .send({ name: 'testing' });
 
     expect(res).toHaveHTTPStatus(302);
@@ -72,6 +80,7 @@ describe('test taskStatuses', () => {
   it('should delete status', async () => {
     const res = await request(server)
       .post('/task-statuses/1')
+      .set({ cookie: authenticatedCookies })
       .send({ _method: 'delete' });
     expect(res).toHaveHTTPStatus(302);
 

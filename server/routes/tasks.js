@@ -8,6 +8,10 @@ import { TaskStatus, Task, User, Tag } from '../entity';
 
 export default (router) => {
   router.get('tasks', '/tasks', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const qb = ctx.orm
       .getRepository(Task)
       .createQueryBuilder('task')
@@ -66,10 +70,14 @@ export default (router) => {
   });
 
   router.get('newTask', '/tasks/new', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statuses = await ctx.orm.getRepository(TaskStatus).find();
     const users = await ctx.orm.getRepository(User).find();
 
-    await ctx.render('tasks/new', {
+    return ctx.render('tasks/new', {
       task: {},
       statuses,
       users: [{ id: null, name: '' }, ...users.map(({ id, email }) => ({ id, name: email }))],
@@ -77,6 +85,10 @@ export default (router) => {
   });
 
   router.get('editTask', '/tasks/:id/edit', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
       relations: ['status', 'assignedTo', 'creator', 'tags'],
     });
@@ -91,6 +103,10 @@ export default (router) => {
   });
 
   router.post('createTask', '/tasks', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskRepository = ctx.orm.getRepository(Task);
     const userRepository = ctx.orm.getRepository(User);
@@ -143,6 +159,10 @@ export default (router) => {
   });
 
   router.patch('updateTask', '/tasks/:id', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskRepository = ctx.orm.getRepository(Task);
     const userRepository = ctx.orm.getRepository(User);
@@ -191,6 +211,10 @@ export default (router) => {
   });
 
   router.delete('deleteTask', '/tasks/:id', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const { id } = ctx.params;
 
     const taskRepository = ctx.orm.getRepository(Task);

@@ -9,7 +9,7 @@ import ormconfig from '../ormconfig';
 describe('test tasks', () => {
   let server;
   let connection;
-  let authCookies;
+  let authenticatedCookies;
   let fixtures;
 
   beforeAll(async () => {
@@ -25,11 +25,13 @@ describe('test tasks', () => {
       .post('/sessions')
       .send({ email: 'user@mail.com', password: 'password' });
 
-    authCookies = res.header['set-cookie'];
+    authenticatedCookies = res.header['set-cookie'];
   });
 
   it('should show tasks page', async () => {
-    const res = await request(server).get('/tasks');
+    const res = await request(server)
+      .get('/tasks')
+      .set({ cookie: authenticatedCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -45,7 +47,7 @@ describe('test tasks', () => {
     const res = await request(server)
       .post('/tasks')
       .send(payload)
-      .set({ cookie: authCookies });
+      .set({ cookie: authenticatedCookies });
     expect(res).toHaveHTTPStatus(302);
 
     const task = await connection
@@ -65,7 +67,9 @@ describe('test tasks', () => {
   it('should show edit page', async () => {
     const { id } = fixtures.Task.buyMilkTask;
 
-    const res = await request(server).get(`/tasks/${id}/edit`);
+    const res = await request(server)
+      .get(`/tasks/${id}/edit`)
+      .set({ cookie: authenticatedCookies });
     expect(res).toHaveHTTPStatus(200);
   });
 
@@ -82,6 +86,7 @@ describe('test tasks', () => {
 
     const res = await request(server)
       .patch(`/tasks/${id}`)
+      .set({ cookie: authenticatedCookies })
       .send(payload);
     expect(res).toHaveHTTPStatus(302);
 
@@ -102,7 +107,10 @@ describe('test tasks', () => {
   it('should delete task', async () => {
     const { id } = fixtures.Task.buyMilkTask;
 
-    const res = await request(server).delete(`/tasks/${id}`);
+    const res = await request(server)
+      .delete(`/tasks/${id}`)
+      .set({ cookie: authenticatedCookies });
+
     expect(res).toHaveHTTPStatus(302);
 
     const task = await connection.getRepository('Task').findOne({ id });

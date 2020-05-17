@@ -6,23 +6,39 @@ import { TaskStatus } from '../entity';
 
 export default (router) => {
   router.get('taskStatuses', '/task-statuses', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskStatuses = await statusRepository.find();
 
-    await ctx.render('task-statuses/index', { taskStatuses });
+    return ctx.render('task-statuses/index', { taskStatuses });
   });
 
-  router.get('newTaskStatus', '/task-statuses/new', async (ctx) => {
-    await ctx.render('task-statuses/new', { taskStatus: {} });
+  router.get('newTaskStatus', '/task-statuses/new', (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
+    return ctx.render('task-statuses/new', { taskStatus: {} });
   });
 
   router.get('editTaskStatus', '/task-statuses/:id/edit', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const { id } = ctx.params;
     const taskStatus = await ctx.orm.getRepository(TaskStatus).findOneOrFail({ id });
     return ctx.render('task-statuses/edit', { taskStatus });
   });
 
   router.post('createTaskStatus', '/task-statuses', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statusRepository = ctx.orm.getRepository(TaskStatus);
 
     const status = await statusRepository.create(ctx.request.body);
@@ -40,6 +56,10 @@ export default (router) => {
   });
 
   router.patch('updateTaskStatus', '/task-statuses/:id', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const { id } = ctx.params;
     const statusRepository = ctx.orm.getRepository(TaskStatus);
 
@@ -47,7 +67,6 @@ export default (router) => {
     const taskStatusAfter = statusRepository.merge(taskStatusBefore, ctx.request.body);
 
     const errors = await validate(taskStatusAfter);
-    console.log({ errors: errors[0] });
 
     if (!_.isEmpty(errors)) {
       return ctx.render('task-statuses/edit', { taskStatus: taskStatusAfter, errors });
@@ -59,6 +78,10 @@ export default (router) => {
   });
 
   router.delete('removeTaskStatus', '/task-statuses/:id', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const { id } = ctx.params;
 

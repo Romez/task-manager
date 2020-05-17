@@ -28,7 +28,7 @@ class Task {
   status;
 
   @ManyToOne(
-    () => 'User',
+    () => User,
     (user) => user.cteatedTasks,
   )
   creator;

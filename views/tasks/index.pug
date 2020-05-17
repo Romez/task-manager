@@ -5,6 +5,18 @@ block title
 
   a.btn.btn-success(href=(urlFor('newTask')))= t('tasks.index.create')
 
+  +formFor()(class='mt-2 border rounded p-2')
+    .form-row
+      .col-md-4
+        +input(filter, 'tags', t('tasks.index.filters.tags'))
+      .col-md-4
+        +select(filter, statuses, 'status', t('tasks.index.filters.status'))
+      .col-md-4
+        +select(filter, users, 'assignedTo', t('tasks.index.filters.assignedTo'))
+    +checkbox(filter, 'myTasks', t('tasks.index.filters.myTasks'))
+
+    +submit(filter)(value=t('tasks.index.filters.submit'))
+
   each task in tasks
     .card.mt-2
       .card-body

@@ -8,15 +8,61 @@ import { TaskStatus, Task, User, Tag } from '../entity';
 
 export default (router) => {
   router.get('tasks', '/tasks', async (ctx) => {
-    const [tasks, count] = await ctx.orm.getRepository(Task).findAndCount({
-      relations: ['status', 'assignedTo', 'creator', 'tags'],
-      skip: ctx.paginate.skip,
-      take: ctx.query.limit,
-    });
+    const qb = ctx.orm
+      .getRepository(Task)
+      .createQueryBuilder('task')
+      .leftJoinAndSelect('task.status', 'statuses')
+      .leftJoinAndSelect('task.creator', 'users')
+      .leftJoinAndSelect('task.assignedTo', 'User')
+      .leftJoinAndSelect('task.tags', 'tags')
+      .skip(ctx.paginate.skip)
+      .take(ctx.query.limit);
+
+    const conditions = {};
+    if (ctx.query.status) {
+      conditions.status = ctx.query.status;
+    }
+
+    if (ctx.query.assignedTo) {
+      conditions.assignedTo = ctx.query.assignedTo;
+    }
+
+    if (ctx.query.myTasks) {
+      conditions.creator = ctx.session.userId;
+    }
+
+    qb.where(conditions);
+
+    if (ctx.query.tags) {
+      const tags = _.get(ctx.query, 'tags', '')
+        .split(',')
+        .filter((tag) => tag.length > 0)
+        .map(_.trim);
+      qb.andWhere('tags.name IN(:...names)', { names: tags });
+    }
+
+    const [tasks, count] = await qb.getManyAndCount();
+
+    const filter = {
+      status: { id: ctx.query.status },
+      tags: ctx.query.tags,
+      assignedTo: { id: ctx.query.assignedTo },
+      myTasks: _.get(ctx.query, 'myTasks', false),
+    };
 
     const pageCount = Math.ceil(count / ctx.query.limit);
 
-    return ctx.render('tasks', { tasks, pageCount, pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page) });
+    const statuses = await ctx.orm.getRepository(TaskStatus).find();
+    const users = await ctx.orm.getRepository(User).find();
+
+    return ctx.render('tasks', {
+      tasks,
+      pageCount,
+      pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page),
+      statuses: [{ id: null, name: '' }, ...statuses],
+      filter,
+      users: [{ id: null, name: '' }, ...users.map(({ id, email }) => ({ id, name: email }))],
+    });
   });
 
   router.get('newTask', '/tasks/new', async (ctx) => {

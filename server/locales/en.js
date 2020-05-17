@@ -68,6 +68,13 @@ module.exports = {
       index: {
         title: 'Tasks',
         create: 'Create new task',
+        filters: {
+          myTasks: 'My Tasks',
+          tags: 'Tags',
+          status: 'Status',
+          assignedTo: 'Assigned to',
+          submit: 'Filter',
+        },
         edit: 'Edit',
         delete: 'Delete',
       },

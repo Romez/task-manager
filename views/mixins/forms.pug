@@ -16,6 +16,22 @@ mixin input(entity, propertyName, label, errors = [])
     if error
       .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')
 
+mixin checkbox(entity, propertyName, label, errors = [])
+  - error = errors.find((error) => error.property === propertyName)
+  .form-group
+    .form-check(class=(errors[propertyName] && 'has-danger'))
+      input(
+        class='form-check-input'
+        type='checkbox'
+        checked=_.get(entity, propertyName, '')
+        name=propertyName
+      )&attributes(attributes)
+
+      label(class='form-check-label')= label
+
+      if error
+        .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')
+
 mixin select(entity, items, propertyName, label, errors = [])
   - error = errors.find((error) => error.property === propertyName)
   .form-group(class=(errors[propertyName] && 'has-danger'))
@@ -26,7 +42,7 @@ mixin select(entity, items, propertyName, label, errors = [])
       class='form-control'
     )&attributes(attributes)
       each item in items
-        option(value=item.id selected=item.id === _.get(entity, [propertyName, 'id'])) #{item.name}
+        option(value=item.id selected=item.id === parseInt(_.get(entity, [propertyName, 'id']), 10)) #{item.name}
 
     if error
       .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')

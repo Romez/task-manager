@@ -1,0 +1,30 @@
+extends /layout/application.pug
+
+block title
+  h3= t('tasks.show.title', task)
+
+  ul.list-group.list-group-flush
+    li.list-group-item
+      strong.mr-1= t('entity.Task.attributes.description')
+        =':'
+      = task.description ? task.description : '-'
+
+    li.list-group-item.d-flex
+      strong.mr-1= t('entity.Task.attributes.creator')
+        =':'
+      = task.creator.email
+
+    li.list-group-item
+      strong.mr-1= t('entity.Task.attributes.status')
+        =':'
+      = task.status.name
+
+    li.list-group-item
+      strong.mr-1= t('entity.Task.attributes.assignedTo')
+        =':'
+      = task.assignedTo ? task.assignedTo.email : '-'
+
+    li.list-group-item
+      strong.mr-1= t('entity.Task.attributes.tags')
+        =':'
+      = task.tags.length > 0 ? task.tags.map(({ name }) => name).join(', ')  : '-'

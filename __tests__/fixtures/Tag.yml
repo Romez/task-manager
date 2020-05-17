@@ -1,0 +1,8 @@
+entity: Tag
+items:
+  job:
+    id: 1
+    name: 'job'
+  buy:
+    id: 2
+    name: 'buy'

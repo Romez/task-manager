@@ -20,7 +20,7 @@ block title
   each task in tasks
     .card.mt-2
       .card-body
-        h5.card-title= task.name
+        a.h5.card-title(href=urlFor('showTask', { id: task.id }))= task.name
         p.card-text= task.description
 
       ul.list-group.list-group-flush

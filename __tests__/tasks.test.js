@@ -35,6 +35,14 @@ describe('test tasks', () => {
     expect(res).toHaveHTTPStatus(200);
   });
 
+  it('should open task view page', async () => {
+    const res = await request(server)
+      .get(`/tasks/${fixtures.Task.buyMilkTask.id}`)
+      .set({ cookie: authenticatedCookies });
+
+    expect(res).toHaveHTTPStatus(200);
+  });
+
   it('should create task', async () => {
     const payload = {
       name: 'Buy milk',

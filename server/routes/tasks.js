@@ -84,6 +84,18 @@ export default (router) => {
     });
   });
 
+  router.get('showTask', '/tasks/:id', async (ctx) => {
+    if (ctx.state.currentUser.isGuest) {
+      return ctx.throw(404);
+    }
+
+    const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
+      relations: ['status', 'assignedTo', 'creator', 'tags'],
+    });
+
+    return ctx.render('tasks/show', { task });
+  });
+
   router.get('editTask', '/tasks/:id/edit', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
       return ctx.throw(404);

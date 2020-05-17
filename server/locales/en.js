@@ -90,6 +90,9 @@ module.exports = {
           delete: 'Delete',
         },
       },
+      show: {
+        title: 'Task: {{name}}',
+      },
     },
     entity: {
       Task: {

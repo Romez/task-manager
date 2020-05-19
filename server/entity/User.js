@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, DeleteDateColumn } from 'typeorm';
 import { IsNotEmpty, IsEmail } from 'class-validator';
 import i18next from 'i18next';
-import { Expose } from 'class-transformer';
 
 import IsUnique from '../validators/IsUnique';
 
@@ -31,10 +30,9 @@ class User {
 
   isGuest = false;
 
-  @Expose()
   get fullName() {
     if (this.firstName || this.lastName) {
-      return this.lastname ? `${this.firstname} ${this.lastname}` : this.firstname;
+      return this.lastName ? `${this.firstName} ${this.lastName}` : this.firstName;
     }
     return this.email;
   }

@@ -74,6 +74,7 @@ module.exports = {
           status: 'Status',
           assignedTo: 'Assigned to',
           submit: 'Filter',
+          skip: 'Skip',
         },
         edit: 'Edit',
         delete: 'Delete',
@@ -150,7 +151,7 @@ module.exports = {
       sessions: {
         create: {
           success: 'User signed in',
-          error: 'Email and/or password wrong',
+          error: 'Wrong email and/or password',
         },
         delete: {
           success: 'User signed out',

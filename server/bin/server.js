@@ -20,8 +20,13 @@ const run = async () => {
 
   process.on('SIGINT', () => {
     app.close(async () => {
-      await connection.close();
-      process.exit(0);
+      try {
+        await connection.close();
+      } catch (err) {
+        console.error(err);
+      } finally {
+        process.exit(0);
+      }
     });
   });
 };

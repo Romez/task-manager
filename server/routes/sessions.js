@@ -4,7 +4,13 @@ import { User } from '../entity';
 import encrypt from '../lib/secure';
 
 export default (router) => {
-  router.get('signIn', '/sessions/new', async (ctx) => ctx.render('sessions/new', { signInForm: {} }));
+  router.get('signIn', '/sessions/new', async (ctx) =>
+    ctx.render('sessions/new', {
+      signInForm: {
+        email: ctx.query.email,
+      },
+    }),
+  );
 
   router.post('session', '/sessions', async (ctx) => {
     const { email, password } = ctx.request.body;
@@ -19,7 +25,7 @@ export default (router) => {
     }
 
     ctx.flash.set(i18next.t('flash.sessions.create.error'));
-    return ctx.render('sessions/new', { signInForm: { email } });
+    return ctx.redirect(router.url('signIn', { query: { email } }));
   });
 
   router.delete('/sessions', (ctx) => {

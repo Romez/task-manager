@@ -12,7 +12,7 @@ block title
     li.list-group-item.d-flex
       strong.mr-1= t('entity.Task.attributes.creator')
         =':'
-      = task.creator.email
+      = task.creator.fullName
 
     li.list-group-item
       strong.mr-1= t('entity.Task.attributes.status')
@@ -22,7 +22,7 @@ block title
     li.list-group-item
       strong.mr-1= t('entity.Task.attributes.assignedTo')
         =':'
-      = task.assignedTo ? task.assignedTo.email : '-'
+      = task.assignedTo ? task.assignedTo.fullName : '-'
 
     li.list-group-item
       strong.mr-1= t('entity.Task.attributes.tags')

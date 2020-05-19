@@ -47,7 +47,7 @@ mixin select(entity, items, propertyName, label, errors = [])
     if error
       .form-control-feedback.text-danger= Object.values(error.constraints).join('. ')
 
-mixin submit(form = null)
+mixin submit()
   .form-group
     input(class='btn btn-success' type='submit')&attributes(attributes)
 

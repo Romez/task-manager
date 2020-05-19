@@ -68,7 +68,6 @@
   "dependencies": {
     "@sentry/node": "^5.15.5",
     "bootstrap": "^4.4.1",
-    "class-transformer": "^0.2.3",
     "class-validator": "^0.12.2",
     "dotenv": "^8.2.0",
     "i18next": "^19.4.3",

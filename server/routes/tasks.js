@@ -19,6 +19,7 @@ export default (router) => {
       .leftJoinAndSelect('task.creator', 'users')
       .leftJoinAndSelect('task.assignedTo', 'User')
       .leftJoinAndSelect('task.tags', 'tags')
+      .orderBy('task.id', 'DESC')
       .skip(ctx.paginate.skip)
       .take(ctx.query.limit);
 
@@ -80,7 +81,7 @@ export default (router) => {
     return ctx.render('tasks/new', {
       task: {},
       statuses,
-      users: [{ id: null, name: '' }, ...users.map(({ id, email }) => ({ id, name: email }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
     });
   });
 
@@ -110,7 +111,7 @@ export default (router) => {
     return ctx.render('tasks/edit', {
       task: { ...task, tags: task.tags.map(({ name }) => name).join(', ') },
       statuses,
-      users: [{ id: null, name: '' }, ...users.map(({ id, email }) => ({ id, name: email }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
     });
   });
 

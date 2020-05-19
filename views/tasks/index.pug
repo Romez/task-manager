@@ -15,7 +15,10 @@ block title
         +select(filter, users, 'assignedTo', t('tasks.index.filters.assignedTo'))
     +checkbox(filter, 'myTasks', t('tasks.index.filters.myTasks'))
 
-    +submit(filter)(value=t('tasks.index.filters.submit'))
+    .d-flex
+      +submit()(value=t('tasks.index.filters.submit'))
+      .ml-1
+        a.btn.btn-primary(href=urlFor('tasks'))= t('tasks.index.filters.skip')
 
   each task in tasks
     .card.mt-2
@@ -27,7 +30,7 @@ block title
         li.list-group-item.d-flex
           strong.mr-1= t('entity.Task.attributes.creator')
             =':'
-          = task.creator.email
+          = task.creator.fullName
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.status')
             =':'
@@ -36,11 +39,11 @@ block title
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.assignedTo')
             =':'
-          = task.assignedTo ? task.assignedTo.email : '-'
+          = task.assignedTo ? task.assignedTo.fullName : '-'
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.tags')
             =':'
-          = task.tags.length > 0 ? task.tags.map(({ name }) => name)  : '-'
+          = task.tags.length > 0 ? task.tags.map(({ name }) => name).join(', ')  : '-'
         .card-footer
           div.d-flex
             a.btn.btn-success.btn-sm.mr-1(href=urlFor('editTask', { id: task.id }))= t('tasks.index.edit')

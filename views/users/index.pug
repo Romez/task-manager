@@ -15,7 +15,7 @@ block title
           div
             strong.mr-1= t('entity.User.attributes.lastName')
               =':'
-            = user.lastName
+            = user.lastName || '-'
 
           div
             strong.mr-1= t('entity.User.attributes.email')

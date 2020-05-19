@@ -7,9 +7,23 @@ block title
     .card.mt-2
       .card-body.d-flex.justify-content-between
         div
-          div= user.fullName
-          div= user.email
+          div
+            strong.mr-1= t('entity.User.attributes.firstName')
+              =':'
+            = user.firstName || '-'
+
+          div
+            strong.mr-1= t('entity.User.attributes.lastName')
+              =':'
+            = user.lastName
+
+          div
+            strong.mr-1= t('entity.User.attributes.email')
+              =':'
+            = user.email
+
         if currentUser.id === user.id
           div.d-flex
-            a.btn.btn-success.btn-sm.mr-1(href=urlFor('editUser', { id: user.id }))= t('users.index.edit')
+            div
+              a.btn.btn-success.btn-sm.mr-1(href=urlFor('editUser', { id: user.id }))= t('users.index.edit')
             +buttonTo(urlFor('deleteUser', { id: user.id }), 'delete')(class="btn btn-danger btn-sm" value=t('users.index.delete'))

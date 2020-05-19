@@ -14,6 +14,9 @@ class TaskStatus {
   })
   name = '';
 
+  @Column('boolean', { default: false })
+  isDefault;
+
   @DeleteDateColumn()
   deletedAt = null;
 }

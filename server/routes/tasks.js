@@ -65,7 +65,7 @@ export default (router) => {
       pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page),
       statuses: [{ id: null, name: '' }, ...statuses],
       filter,
-      users: [{ id: null, name: '' }, ...users.map(({ id, email }) => ({ id, name: email }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
     });
   });
 
@@ -74,7 +74,7 @@ export default (router) => {
       return ctx.throw(404);
     }
 
-    const statuses = await ctx.orm.getRepository(TaskStatus).find();
+    const statuses = await ctx.orm.getRepository(TaskStatus).find({ order: { isDefault: 'DESC' } });
     const users = await ctx.orm.getRepository(User).find();
 
     return ctx.render('tasks/new', {

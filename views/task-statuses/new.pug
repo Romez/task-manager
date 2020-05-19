@@ -6,4 +6,6 @@ block title
 block content
   +formFor()(action=urlFor('taskStatuses') method='post')
     +input(taskStatus, 'name', t('entity.TaskStatus.attributes.name'), errors)
+    +checkbox(taskStatus, 'isDefault', t('entity.TaskStatus.attributes.isDefault'), errors)
+
     +submit(taskStatus)(value=t('taskStatuses.new.form.submit'))

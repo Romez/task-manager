@@ -108,6 +108,7 @@ module.exports = {
       TaskStatus: {
         attributes: {
           name: 'Status name',
+          isDefault: 'Is default',
         },
         validates: {
           name: {

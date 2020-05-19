@@ -11,7 +11,7 @@ export default (router) => {
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
-    const taskStatuses = await statusRepository.find();
+    const taskStatuses = await statusRepository.find({ order: { isDefault: 'DESC' } });
 
     return ctx.render('task-statuses/index', { taskStatuses });
   });
@@ -21,7 +21,7 @@ export default (router) => {
       return ctx.throw(404);
     }
 
-    return ctx.render('task-statuses/new', { taskStatus: {} });
+    return ctx.render('task-statuses/new', { taskStatus: { isDefault: false } });
   });
 
   router.get('editTaskStatus', '/task-statuses/:id/edit', async (ctx) => {
@@ -40,13 +40,18 @@ export default (router) => {
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
+    const { body } = ctx.request;
 
-    const status = await statusRepository.create(ctx.request.body);
+    const status = await statusRepository.create({ name: body.name, isDefault: !!body.isDefault });
     const errors = await validate(status);
 
     if (!_.isEmpty(errors)) {
-      const { name } = ctx.request.body;
+      const { name } = body;
       return ctx.render('task-statuses/new', { taskStatus: { name }, errors });
+    }
+
+    if (status.isDefault) {
+      await statusRepository.update({ isDefault: true }, { isDefault: false });
     }
 
     await statusRepository.save(status);
@@ -61,15 +66,23 @@ export default (router) => {
     }
 
     const { id } = ctx.params;
+    const { body } = ctx.request;
     const statusRepository = ctx.orm.getRepository(TaskStatus);
 
     const taskStatusBefore = await statusRepository.findOneOrFail(id);
-    const taskStatusAfter = statusRepository.merge(taskStatusBefore, ctx.request.body);
+    const taskStatusAfter = statusRepository.merge(taskStatusBefore, {
+      name: body.name,
+      isDefault: !!body.isDefault,
+    });
 
     const errors = await validate(taskStatusAfter);
 
     if (!_.isEmpty(errors)) {
       return ctx.render('task-statuses/edit', { taskStatus: taskStatusAfter, errors });
+    }
+
+    if (taskStatusAfter.isDefault) {
+      await statusRepository.update({ isDefault: true }, { isDefault: false });
     }
 
     await statusRepository.save(taskStatusAfter);

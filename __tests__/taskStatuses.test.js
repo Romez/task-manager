@@ -43,14 +43,19 @@ describe('test taskStatuses', () => {
   });
 
   it('should create status', async () => {
-    const payload = { name: 'inProgress' };
+    const payload = { name: 'inProgress', isDefault: 'on' };
     const res = await request(server)
       .post('/task-statuses')
       .set({ cookie: authenticatedCookies })
       .send(payload);
 
-    const status = await connection.getRepository('TaskStatus').findOne({ name: payload.name });
-    expect(status).toBeTruthy();
+    const statusRepository = connection.getRepository('TaskStatus');
+
+    const status = await statusRepository.findOne({ name: payload.name });
+    expect(status).toMatchObject({ name: 'inProgress', isDefault: true });
+
+    const prevDefaultStatus = await statusRepository.findOne(fixtures.TaskStatus.taskStatusNew.id);
+    expect(prevDefaultStatus.isDefault).toBeFalsy();
 
     expect(res).toHaveHTTPStatus(302);
   });
@@ -64,17 +69,22 @@ describe('test taskStatuses', () => {
   });
 
   it('should update task status', async () => {
-    const { id } = fixtures.TaskStatus.taskStatusNew;
+    const { id } = fixtures.TaskStatus.taskStatusFinished;
 
     const res = await request(server)
       .patch(`/task-statuses/${id}`)
       .set({ cookie: authenticatedCookies })
-      .send({ name: 'testing' });
+      .send({ name: 'testing', isDefault: 'on' });
 
     expect(res).toHaveHTTPStatus(302);
 
-    const taskStatus = await connection.getRepository('TaskStatus').findOneOrFail(id);
-    expect(taskStatus.name).toBe('testing');
+    const statusRepository = connection.getRepository('TaskStatus');
+
+    const taskStatus = await statusRepository.findOneOrFail(id);
+    expect(taskStatus).toMatchObject({ name: 'testing', isDefault: true });
+
+    const prevDefaultStatus = await statusRepository.findOne(fixtures.TaskStatus.taskStatusNew.id);
+    expect(prevDefaultStatus.isDefault).toBeFalsy();
   });
 
   it('should delete status', async () => {

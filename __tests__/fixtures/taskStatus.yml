@@ -3,6 +3,8 @@ items:
   taskStatusNew:
     id: 1
     name: new
+    isDefault: true
   taskStatusFinished:
     id: 2
     name: finished
+    isDefault: false

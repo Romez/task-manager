@@ -5,4 +5,5 @@ dotenv.config();
 module.exports = {
   testEnvironment: 'node',
   testRegex: '.*(test)\\.js$',
+  setupFilesAfterEnv: ['./jest.setup.js'],
 };

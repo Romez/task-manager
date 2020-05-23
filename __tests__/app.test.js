@@ -1,14 +1,9 @@
 import request from 'supertest';
-import matchers from 'jest-supertest-matchers';
 
 import app from '../server/app';
 
 describe('test arequestpp', () => {
   let server;
-
-  beforeAll(() => {
-    expect.extend(matchers);
-  });
 
   beforeEach(() => {
     server = app().listen();

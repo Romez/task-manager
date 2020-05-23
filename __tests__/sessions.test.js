@@ -1,5 +1,4 @@
 import request from 'supertest';
-import matchers from 'jest-supertest-matchers';
 import { createConnection } from 'typeorm';
 
 import loadFixtures from './loadFixtures';
@@ -10,10 +9,6 @@ describe('test session', () => {
   let app;
   let server;
   let connection;
-
-  beforeAll(async () => {
-    expect.extend(matchers);
-  });
 
   beforeEach(async () => {
     connection = await createConnection(ormconfig[process.env.NODE_ENV]);

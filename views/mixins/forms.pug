@@ -50,8 +50,3 @@ mixin select(entity, items, propertyName, label, errors = [])
 mixin submit()
   .form-group
     input(class='btn btn-success' type='submit')&attributes(attributes)
-
-mixin buttonTo(action, method)
-  form(action=action, method="post")
-    input(name="_method" type="hidden" value=method)
-    input(type='submit')&attributes(attributes)

@@ -1,5 +1,8 @@
 module.exports = {
   translation: {
+    common: {
+      areYouSure: 'Are you sure?',
+    },
     menu: {
       brand: 'Tasks Manager',
       home: 'Home',

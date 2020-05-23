@@ -23,7 +23,12 @@ html(lang="en")
         ul.navbar-nav
           if (!currentUser.isGuest)
             li.nav-item
-              +buttonTo(urlFor('session'), 'delete')(class="btn nav-link" value=t('menu.signOut', currentUser))
+              a(
+                class="btn nav-link"
+                href=urlFor('session'),
+                data-method="delete",
+                rel="nofollow"
+               )= t('menu.signOut', currentUser)
           else
             li.nav-item
               a.nav-link(href=urlFor('signIn'))=t('sessions.new.title')

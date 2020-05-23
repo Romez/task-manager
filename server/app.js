@@ -86,7 +86,9 @@ const createApp = (connection) => {
 
   setupLocalization();
 
-  app.use(serve(path.join(__dirname, '..', 'dist')));
+  if (process.env.NODE_ENV === 'production') {
+    app.use(serve(path.join(__dirname, '..', 'dist')));
+  }
 
   addRoutes(router);
 

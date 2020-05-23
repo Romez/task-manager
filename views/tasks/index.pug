@@ -30,7 +30,7 @@ block title
         li.list-group-item.d-flex
           strong.mr-1= t('entity.Task.attributes.creator')
             =':'
-          = task.creator.fullName
+          = task.creator.toString()
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.status')
             =':'
@@ -39,7 +39,7 @@ block title
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.assignedTo')
             =':'
-          = task.assignedTo ? task.assignedTo.fullName : '-'
+          = task.assignedTo ? task.assignedTo.toString() : '-'
         li.list-group-item
           strong.mr-1= t('entity.Task.attributes.tags')
             =':'

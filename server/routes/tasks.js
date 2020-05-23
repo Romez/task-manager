@@ -66,7 +66,7 @@ export default (router) => {
       pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page),
       statuses: [{ id: null, name: '' }, ...statuses],
       filter,
-      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.toString() }))],
     });
   });
 
@@ -81,7 +81,7 @@ export default (router) => {
     return ctx.render('tasks/new', {
       task: {},
       statuses,
-      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.toString() }))],
     });
   });
 
@@ -111,7 +111,7 @@ export default (router) => {
     return ctx.render('tasks/edit', {
       task: { ...task, tags: task.tags.map(({ name }) => name).join(', ') },
       statuses,
-      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.fullName }))],
+      users: [{ id: null, name: '' }, ...users.map((user) => ({ id: user.id, name: user.toString() }))],
     });
   });
 

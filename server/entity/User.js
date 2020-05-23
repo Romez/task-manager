@@ -30,7 +30,7 @@ class User {
 
   isGuest = false;
 
-  get fullName() {
+  toString() {
     if (this.firstName || this.lastName) {
       return this.lastName ? `${this.firstName} ${this.lastName}` : this.firstName;
     }

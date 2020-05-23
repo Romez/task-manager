@@ -27,7 +27,6 @@ module.exports = {
       index: {
         title: 'Users',
         email: 'Email',
-        fullName: 'Full name',
         edit: 'Edit',
         delete: 'Delete',
       },
@@ -126,18 +125,12 @@ module.exports = {
           lastName: 'Last name',
           email: 'Email',
           password: 'Password',
-          fullName: 'Full name',
         },
         validates: {
           email: {
             unique: 'Email "{{name}}" already exists',
             isEmail: '"{{email}}" is not a valid email',
           },
-        },
-      },
-      Guest: {
-        attributes: {
-          fullName: 'Full name',
         },
       },
     },

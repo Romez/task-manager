@@ -15,35 +15,29 @@ class Task {
   @IsNotEmpty({
     message: () => i18next.t('entity.Task.validates.name.isNotEmpty'),
   })
-  name = '';
+  name;
 
   @Column('varchar', { nullable: true })
-  description = '';
+  description;
 
-  @ManyToOne(
-    () => TaskStatus,
-    (status) => status.tasks,
-  )
-  @JoinColumn()
+  @ManyToOne(() => TaskStatus)
+  @JoinColumn({ name: 'status_id' })
   status;
 
-  @ManyToOne(
-    () => User,
-    (user) => user.cteatedTasks,
-  )
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'creator_id' })
   creator;
 
-  @ManyToOne(
-    () => User,
-    (user) => user.assignedTasks,
-  )
+  @ManyToOne(() => User)
+  @JoinColumn({ name: 'assigned_to_id' })
   assignedTo;
 
-  @ManyToMany(
-    () => Tag,
-    (tag) => tag.task,
-  )
-  @JoinTable()
+  @ManyToMany(() => Tag)
+  @JoinTable({
+    name: 'tasks_tags',
+    joinColumns: [{ name: 'task_id' }],
+    inverseJoinColumns: [{ name: 'tag_id' }],
+  })
   tags;
 }
 

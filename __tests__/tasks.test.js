@@ -3,7 +3,6 @@ import { createConnection } from 'typeorm';
 
 import loadFixtures from './loadFixtures';
 import getApp from '../server/app';
-import ormconfig from '../ormconfig';
 
 describe('test tasks', () => {
   let server;
@@ -12,7 +11,7 @@ describe('test tasks', () => {
   let fixtures;
 
   beforeEach(async () => {
-    connection = await createConnection(ormconfig[process.env.NODE_ENV]);
+    connection = await createConnection(process.env.NODE_ENV);
     fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 

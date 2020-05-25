@@ -143,6 +143,9 @@ module.exports = {
         update: {
           success: 'User was updated',
         },
+        delete: {
+          hasTasks: 'User has tasks',
+        },
       },
       sessions: {
         create: {
@@ -161,6 +164,7 @@ module.exports = {
           success: 'Task status was updated',
         },
         delete: {
+          hasTasks: 'Task status has tasks',
           success: 'Task status "{{name}}" was deleted',
         },
       },

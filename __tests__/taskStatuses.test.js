@@ -3,7 +3,6 @@ import { createConnection } from 'typeorm';
 
 import loadFixtures from './loadFixtures';
 import getApp from '../server/app';
-import ormconfig from '../ormconfig';
 
 describe('test taskStatuses', () => {
   let server;
@@ -12,7 +11,7 @@ describe('test taskStatuses', () => {
   let authenticatedCookies;
 
   beforeEach(async () => {
-    connection = await createConnection(ormconfig[process.env.NODE_ENV]);
+    connection = await createConnection(process.env.NODE_ENV);
     fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
@@ -83,13 +82,15 @@ describe('test taskStatuses', () => {
   });
 
   it('should delete status', async () => {
+    const status = fixtures.TaskStatus.taskStatusFinished;
+
     const res = await request(server)
-      .post('/task-statuses/1')
+      .post(`/task-statuses/${status.id}`)
       .set({ cookie: authenticatedCookies })
       .send({ _method: 'delete' });
     expect(res).toHaveHTTPStatus(302);
 
-    const taskStatus = await connection.getRepository('TaskStatus').findOne({ name: 'new' });
+    const taskStatus = await connection.getRepository('TaskStatus').findOne(status.id);
     expect(taskStatus).toBeFalsy();
   });
 

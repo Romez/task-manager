@@ -135,7 +135,7 @@ export default (router) => {
       .filter((tag) => tag.length > 0)
       .map((tag) => tag.trim());
 
-    const existsTags = await tagsRespository.find({ name: In(tags) });
+    const existsTags = await tagsRespository.find({ name: In(tags), order: { id: 'ASC' } });
     const missedTags = await tagsRespository.save(
       _.differenceBy(
         tags.map((name) => ({ name })),

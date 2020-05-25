@@ -2,7 +2,6 @@
 /* eslint-disable no-restricted-syntax */
 
 import * as path from 'path';
-import { getRepository } from 'typeorm';
 import { Builder, Loader, Parser, Resolver, fixturesIterator } from 'typeorm-fixtures-cli/dist';
 
 const loadFixtures = async (connection) => {
@@ -17,7 +16,7 @@ const loadFixtures = async (connection) => {
   for (const fixture of fixturesIterator(fixtures)) {
     const entity = await builder.build(fixture);
     const entityName = entity.constructor.name;
-    const entitySaved = await getRepository(entity.constructor.name).save(entity);
+    const entitySaved = await connection.getRepository(entity.constructor.name).save(entity);
     if (!entities[entityName]) {
       entities[entityName] = {};
     }

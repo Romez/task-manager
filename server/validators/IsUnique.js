@@ -9,7 +9,7 @@ const IsUnique = (validationOptions) => (object, propertyName) => {
     constraints: [],
     validator: {
       async validate(value, args) {
-        const repository = getRepository(args.targetName);
+        const repository = getRepository(args.targetName, process.env.NODE_ENV);
 
         const entity = await repository.findOne({ [args.property]: value, deletedAt: null });
 

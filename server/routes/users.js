@@ -72,13 +72,18 @@ export default (router) => {
   router.delete('deleteUser', '/users/:id', async (ctx) => {
     const { id } = ctx.params;
     const userRepository = ctx.orm.getRepository(User);
-    const user = await userRepository.findOneOrFail({ id });
+    const user = await userRepository.findOneOrFail({ id }, { relations: ['tasks'] });
 
     if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
       ctx.throw(404);
     }
 
-    await userRepository.softRemove(user);
+    if (!_.isEmpty(user.tasks)) {
+      ctx.flash.set(i18next.t('flash.users.delete.hasTasks'));
+      return ctx.redirect(router.url('users'));
+    }
+
+    await userRepository.remove(user);
     ctx.session = {};
 
     return ctx.redirect(router.url('users'));

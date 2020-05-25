@@ -4,7 +4,6 @@ import faker from 'faker';
 
 import loadFixtures from './loadFixtures';
 import getApp from '../server/app';
-import ormconfig from '../ormconfig';
 
 describe('test users', () => {
   let server;
@@ -13,7 +12,7 @@ describe('test users', () => {
   let fixtures;
 
   beforeEach(async () => {
-    connection = await createConnection(ormconfig[process.env.NODE_ENV]);
+    connection = await createConnection(process.env.NODE_ENV);
     fixtures = await loadFixtures(connection);
     server = getApp(connection).listen();
 
@@ -78,11 +77,18 @@ describe('test users', () => {
   });
 
   it('should delete user', async () => {
-    const { id } = fixtures.User.user;
+    const { id, email } = fixtures.User.vasya;
+
+    const authRes = await request(server)
+      .post('/sessions')
+      .send({ email, password: 'password' });
+
+    const vasyaAuthCookies = authRes.header['set-cookie'];
+
     const res = await request(server)
       .post(`/users/${id}`)
       .send({ _method: 'delete' })
-      .set({ cookie: authenticatedCookies });
+      .set({ cookie: vasyaAuthCookies });
 
     const user = await connection.getRepository('User').findOne({ id });
     expect(user).toBeFalsy();

@@ -4,12 +4,11 @@ import dotenv from 'dotenv';
 import { createConnection } from 'typeorm';
 
 import createApp from '../app';
-import ormconfig from '../../ormconfig';
 
 dotenv.config();
 
 const run = async () => {
-  const connection = await createConnection(ormconfig[process.env.NODE_ENV]);
+  const connection = await createConnection(process.env.NODE_ENV);
 
   const server = createApp(connection);
   const port = process.env.PORT || 3000;

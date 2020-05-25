@@ -98,9 +98,14 @@ export default (router) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const { id } = ctx.params;
 
-    const status = await statusRepository.findOneOrFail({ id });
+    const status = await statusRepository.findOneOrFail({ id }, { relations: ['tasks'] });
 
-    await statusRepository.softRemove(status);
+    if (!_.isEmpty(status.tasks)) {
+      ctx.flash.set(i18next.t('flash.taskStatuses.delete.hasTasks'));
+      return ctx.redirect(router.url('taskStatuses'));
+    }
+
+    await statusRepository.remove(status);
 
     ctx.flash.set(i18next.t('flash.taskStatuses.delete.success', { name: status.name }));
     return ctx.redirect(router.url('taskStatuses'));

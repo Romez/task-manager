@@ -1,47 +1,52 @@
-module.exports = {
-  development: {
+module.exports = [
+  {
+    name: 'development',
     type: 'sqlite',
     database: `${__dirname}/database.sqlite`,
-    synchronize: true,
+    synchronize: false,
+    migrationsRun: true,
     logger: 'advanced-console',
     logging: ['query'],
     entities: [`${__dirname}/server/entity/**/*.js`],
-    migrations: ['server/migration/*.js'],
+    migrations: ['server/migrations/*.js'],
     subscribers: ['server/subscriber/*.js'],
     cli: {
       entitiesDir: 'server/entity',
-      migrationsDir: 'server/migration',
+      migrationsDir: 'server/migrations',
       subscribersDir: 'server/subscriber',
     },
   },
-  test: {
+  {
+    name: 'test',
     type: 'sqlite',
     database: ':memory:',
     synchronize: true,
     logger: 'debug',
     logging: true,
     entities: [`${__dirname}/server/entity/**/*.js`],
-    migrations: ['server/migration/*.js'],
+    migrations: ['server/migrations/*.js'],
     subscribers: ['server/subscriber/*.js'],
     cli: {
       entitiesDir: 'server/entity',
-      migrationsDir: 'server/migration',
+      migrationsDir: 'server/migrations',
       subscribersDir: 'server/subscriber',
     },
   },
-  production: {
+  {
+    name: 'production',
     type: 'postgres',
-    synchronize: true,
+    synchronize: false,
+    migrationsRun: true,
     logger: 'debug',
     logging: true,
     url: process.env.DATABASE_URL,
     entities: ['dist/entity/**/*.js'],
-    migrations: ['dist/migration/*.js'],
+    migrations: ['dist/migrations/*.js'],
     subscribers: ['dist/subscriber/*.js'],
     cli: {
       entitiesDir: 'dist/entity',
-      migrationsDir: 'dist/migration',
+      migrationsDir: 'dist/migrations',
       subscribersDir: 'dist/subscriber',
     },
   },
-};
+];

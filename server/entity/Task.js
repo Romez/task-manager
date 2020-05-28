@@ -2,7 +2,6 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, ManyToMany, JoinTabl
 import i18next from 'i18next';
 import { IsNotEmpty } from 'class-validator';
 
-import Tag from './Tag';
 import User from './User';
 import TaskStatus from './TaskStatus';
 
@@ -20,23 +19,23 @@ class Task {
   @Column('varchar', { nullable: true })
   description;
 
-  @ManyToOne(() => TaskStatus)
+  @ManyToOne(() => TaskStatus, { eager: true })
   @JoinColumn({ name: 'status_id' })
   status;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'creator_id' })
   creator;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { eager: true })
   @JoinColumn({ name: 'assigned_to_id' })
   assignedTo;
 
-  @ManyToMany(() => Tag)
+  @ManyToMany(() => 'Tag', { eager: true })
   @JoinTable({
     name: 'tasks_tags',
-    joinColumns: [{ name: 'task_id' }],
-    inverseJoinColumns: [{ name: 'tag_id' }],
+    joinColumns: [{ name: 'task_id', referencedColumnName: 'id' }],
+    inverseJoinColumns: [{ name: 'tag_id', referencedColumnName: 'id' }],
   })
   tags;
 }

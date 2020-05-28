@@ -12,42 +12,41 @@ export default (router) => {
       return ctx.throw(404);
     }
 
-    const qb = ctx.orm
-      .getRepository(Task)
-      .createQueryBuilder('task')
-      .leftJoinAndSelect('task.status', 'statuses')
-      .leftJoinAndSelect('task.creator', 'users')
-      .leftJoinAndSelect('task.assignedTo', 'User')
-      .leftJoinAndSelect('task.tags', 'tags')
-      .orderBy('task.id', 'DESC')
-      .skip(ctx.paginate.skip)
-      .take(ctx.query.limit);
+    const where = {};
 
-    const conditions = {};
     if (ctx.query.status) {
-      conditions.status = ctx.query.status;
+      where.status = ctx.query.status;
     }
 
     if (ctx.query.assignedTo) {
-      conditions.assignedTo = ctx.query.assignedTo;
+      where.assignedTo = ctx.query.assignedTo;
     }
 
     if (ctx.query.myTasks) {
-      conditions.creator = ctx.session.userId;
+      where.creator = ctx.session.userId;
     }
-
-    qb.where(conditions);
 
     if (ctx.query.tags) {
       const tags = _.get(ctx.query, 'tags', '')
         .split(',')
-        .filter((tag) => tag.length > 0)
-        .map(_.trim);
-      qb.andWhere('tags.name IN(:...names)', { names: tags });
+        .map(_.trim)
+        .filter((tag) => !_.isEmpty(tag));
+
+      const existsTags = await ctx.orm.getRepository(Tag).find({ name: In(tags) });
+
+      if (!_.isEmpty(existsTags)) {
+        const tasksIds = _.uniq(_.flatMap(existsTags, (tag) => tag.taskIds));
+        where.id = In(tasksIds);
+      }
     }
 
-    const [tasks, count] = await qb.getManyAndCount();
-
+    const taskRepository = ctx.orm.getRepository(Task);
+    const [tasks, count] = await taskRepository.findAndCount({
+      where,
+      order: { id: 'DESC' },
+      skip: ctx.paginate.skip,
+      take: ctx.query.limit,
+    });
     const filter = {
       status: { id: ctx.query.status },
       tags: ctx.query.tags,

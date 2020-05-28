@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable, RelationId } from 'typeorm';
 import { IsNotEmpty } from 'class-validator';
 
 import IsUnique from '../validators/IsUnique';
@@ -16,10 +16,13 @@ class Tag {
   @ManyToMany(() => 'Task')
   @JoinTable({
     name: 'tasks_tags',
-    joinColumns: [{ name: 'tag_id' }],
-    inverseJoinColumns: [{ name: 'task_id' }],
+    joinColumns: [{ name: 'tag_id', referencedColumnName: 'id' }],
+    inverseJoinColumns: [{ name: 'task_id', referencedColumnName: 'id' }],
   })
   tasks;
+
+  @RelationId((tag) => tag.tasks)
+  taskIds;
 }
 
 export default Tag;

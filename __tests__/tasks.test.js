@@ -102,7 +102,7 @@ describe('test tasks', () => {
       creator: fixtures.User.user,
       status: fixtures.TaskStatus.taskStatusFinished,
       assignedTo: null,
-      tags: [fixtures.Tag.buy, { name: 'food' }],
+      tags: [{ name: fixtures.Tag.buy.name }, { name: 'food' }],
     });
   });
 

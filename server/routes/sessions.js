@@ -5,11 +5,7 @@ import encrypt from '../lib/secure';
 
 export default (router) => {
   router.get('signIn', '/sessions/new', async (ctx) =>
-    ctx.render('sessions/new', {
-      signInForm: {
-        email: ctx.query.email,
-      },
-    }),
+    ctx.render('sessions/new', { signInForm: { email: ctx.query.email } }),
   );
 
   router.post('session', '/sessions', async (ctx) => {

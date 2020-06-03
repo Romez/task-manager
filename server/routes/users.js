@@ -32,7 +32,7 @@ export default (router) => {
     const user = await ctx.orm.getRepository(User).findOne({ id });
 
     if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
-      ctx.throw(404);
+      ctx.throw(403);
     }
 
     await ctx.render('users/edit', { user });
@@ -65,7 +65,7 @@ export default (router) => {
 
     const userBefore = await userRepository.findOneOrFail({ id });
     if (userBefore.id !== ctx.session.userId) {
-      ctx.throw(404);
+      ctx.throw(403);
     }
 
     const userAfter = userRepository.merge(userBefore, ctx.request.body);
@@ -86,7 +86,7 @@ export default (router) => {
     const user = await userRepository.findOneOrFail({ id }, { relations: ['tasks'] });
 
     if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
-      ctx.throw(404);
+      ctx.throw(403);
     }
 
     if (!_.isEmpty(user.tasks)) {

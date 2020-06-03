@@ -41,9 +41,9 @@ describe('test tasks', () => {
     const payload = {
       name: 'Buy milk',
       description: '3.2%',
-      status: fixtures.TaskStatus.taskStatusNew.id,
-      assignedTo: fixtures.User.user.id,
-      tags: [fixtures.Tag.job.name, fixtures.Tag.buy.name, 'fix'].join(', '),
+      status_id: fixtures.TaskStatus.taskStatusNew.id,
+      assigned_to_id: fixtures.User.user.id,
+      tags: [fixtures.Tag.job.name, 'fix'].join(', '),
     };
 
     const res = await request(server)
@@ -62,7 +62,7 @@ describe('test tasks', () => {
       creator: fixtures.User.user,
       status: fixtures.TaskStatus.taskStatusNew,
       assignedTo: fixtures.User.user,
-      tags: [{ name: 'job' }, { name: 'buy' }, { name: 'fix' }],
+      tags: [{ name: 'job' }, { name: 'fix' }],
     });
   });
 
@@ -81,8 +81,8 @@ describe('test tasks', () => {
     const payload = {
       name: 'buy meat',
       description: 'beaf 0.5 kg',
-      status: fixtures.TaskStatus.taskStatusFinished.id,
-      assignedTo: '',
+      status_id: fixtures.TaskStatus.taskStatusFinished.id,
+      assigned_to_id: '',
       tags: [fixtures.Tag.buy.name, 'food'].join(','),
     };
 

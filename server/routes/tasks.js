@@ -9,7 +9,7 @@ import { TaskStatus, Task, User, Tag } from '../entity';
 export default (router) => {
   router.get('tasks', '/tasks', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const where = {};
@@ -73,7 +73,7 @@ export default (router) => {
 
   router.get('newTask', '/tasks/new', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statuses = await ctx.orm.getRepository(TaskStatus).find({ order: { isDefault: 'DESC' } });
@@ -88,7 +88,7 @@ export default (router) => {
 
   router.get('showTask', '/tasks/:id', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
@@ -100,7 +100,7 @@ export default (router) => {
 
   router.get('editTask', '/tasks/:id/edit', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
@@ -118,7 +118,7 @@ export default (router) => {
 
   router.post('createTask', '/tasks', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
@@ -128,15 +128,15 @@ export default (router) => {
 
     const { body } = ctx.request;
 
-    const status = await statusRepository.findOneOrFail(body.status);
+    const status = await statusRepository.findOneOrFail(body.status_id);
     const creator = await userRepository.findOneOrFail(ctx.session.userId);
-    const assignedTo = body.assignedTo ? await userRepository.findOneOrFail(body.assignedTo) : null;
+    const assignedTo = body.assigned_to_id ? await userRepository.findOneOrFail(body.assigned_to_id) : null;
     const tags = body.tags
       .split(',')
       .filter((tag) => tag.length > 0)
       .map((tag) => tag.trim());
 
-    const existsTags = await tagsRespository.find({ name: In(tags), order: { id: 'ASC' } });
+    const existsTags = await tagsRespository.find({ where: { name: In(tags) }, order: { id: 'ASC' } });
     const missedTags = await tagsRespository.save(
       _.differenceBy(
         tags.map((name) => ({ name })),
@@ -153,6 +153,7 @@ export default (router) => {
       assignedTo,
       tags: [...existsTags, ...missedTags],
     });
+
     const errors = await validate(task);
 
     if (!_.isEmpty(errors)) {
@@ -174,7 +175,7 @@ export default (router) => {
 
   router.patch('updateTask', '/tasks/:id', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
@@ -201,8 +202,8 @@ export default (router) => {
     const task = await taskRepository.findOneOrFail(ctx.params.id);
     task.name = body.name;
     task.description = body.description;
-    task.status = await statusRepository.findOneOrFail(body.status);
-    task.assignedTo = body.assignedTo ? await userRepository.findOneOrFail(body.assignedTo) : null;
+    task.status = await statusRepository.findOneOrFail(body.status_id);
+    task.assignedTo = body.assigned_to_id ? await userRepository.findOneOrFail(body.assigned_to_id) : null;
     task.tags = [...existsTags, ...missedTags];
 
     const errors = await validate(task);
@@ -226,7 +227,7 @@ export default (router) => {
 
   router.delete('deleteTask', '/tasks/:id', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const { id } = ctx.params;

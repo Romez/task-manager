@@ -7,8 +7,8 @@ block content
   +formFor()(action=urlFor('tasks') method='post')
     +input(task, 'name', t('entity.Task.attributes.name'), errors)
     +input(task, 'description', t('entity.Task.attributes.description'), errors)
-    +select(task, statuses, 'status', t('entity.Task.attributes.status'), errors)
-    +select(task, users, 'assignedTo', t('entity.Task.attributes.assignedTo'), errors)
+    +select(task, statuses, 'status_id', t('entity.Task.attributes.status'), errors)
+    +select(task, users, 'assigned_to_id', t('entity.Task.attributes.assignedTo'), errors)
     +input(task, 'tags', t('entity.Task.attributes.tags'), errors)
 
     +submit(task)(value=t('tasks.new.submit'))

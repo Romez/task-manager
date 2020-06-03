@@ -7,7 +7,7 @@ import { TaskStatus } from '../entity';
 export default (router) => {
   router.get('taskStatuses', '/task-statuses', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
@@ -18,7 +18,7 @@ export default (router) => {
 
   router.get('newTaskStatus', '/task-statuses/new', (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     return ctx.render('task-statuses/new', { taskStatus: { isDefault: false } });
@@ -26,7 +26,7 @@ export default (router) => {
 
   router.get('editTaskStatus', '/task-statuses/:id/edit', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const { id } = ctx.params;
@@ -36,7 +36,7 @@ export default (router) => {
 
   router.post('createTaskStatus', '/task-statuses', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);
@@ -62,7 +62,7 @@ export default (router) => {
 
   router.patch('updateTaskStatus', '/task-statuses/:id', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const { id } = ctx.params;
@@ -92,7 +92,7 @@ export default (router) => {
 
   router.delete('removeTaskStatus', '/task-statuses/:id', async (ctx) => {
     if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(404);
+      return ctx.throw(403);
     }
 
     const statusRepository = ctx.orm.getRepository(TaskStatus);

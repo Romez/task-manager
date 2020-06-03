@@ -1,6 +1,7 @@
 import { validate } from 'class-validator';
 import _ from 'lodash';
 import i18next from 'i18next';
+import * as paginate from 'koa-ctx-paginate';
 
 import encrypt from '../lib/secure';
 import { User } from '../entity';
@@ -12,8 +13,18 @@ export default (router) => {
   });
 
   router.get('users', '/users', async (ctx) => {
-    const users = await ctx.orm.getRepository(User).find();
-    await ctx.render('users', { users });
+    const [users, count] = await ctx.orm.getRepository(User).findAndCount({
+      skip: ctx.paginate.skip,
+      take: ctx.query.limit,
+    });
+
+    const pageCount = Math.ceil(count / ctx.query.limit);
+
+    await ctx.render('users', {
+      users,
+      pageCount,
+      pages: paginate.getArrayPages(ctx)(3, pageCount, ctx.query.page),
+    });
   });
 
   router.get('editUser', '/users/:id/edit', async (ctx) => {

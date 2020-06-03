@@ -46,7 +46,9 @@ export default (router) => {
       order: { id: 'DESC' },
       skip: ctx.paginate.skip,
       take: ctx.query.limit,
+      relations: ['status', 'tags', 'creator', 'assignedTo'],
     });
+
     const filter = {
       status: { id: ctx.query.status },
       tags: ctx.query.tags,

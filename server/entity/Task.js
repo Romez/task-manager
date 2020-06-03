@@ -19,19 +19,19 @@ class Task {
   @Column('varchar', { nullable: true })
   description;
 
-  @ManyToOne(() => TaskStatus, { eager: true })
+  @ManyToOne(() => TaskStatus)
   @JoinColumn({ name: 'status_id' })
   status;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'creator_id' })
   creator;
 
-  @ManyToOne(() => User, { eager: true })
+  @ManyToOne(() => User)
   @JoinColumn({ name: 'assigned_to_id' })
   assignedTo;
 
-  @ManyToMany(() => 'Tag', { eager: true })
+  @ManyToMany(() => 'Tag')
   @JoinTable({
     name: 'tasks_tags',
     joinColumns: [{ name: 'task_id', referencedColumnName: 'id' }],

@@ -17,7 +17,7 @@ describe('test tasks', () => {
 
     const res = await request(server)
       .post('/sessions')
-      .send({ email: 'user@mail.com', password: 'password' });
+      .send({ email: 'petya@mail.com', password: 'password' });
 
     authenticatedCookies = res.header['set-cookie'];
   });
@@ -42,7 +42,7 @@ describe('test tasks', () => {
       name: 'Buy milk',
       description: '3.2%',
       status_id: fixtures.TaskStatus.taskStatusNew.id,
-      assigned_to_id: fixtures.User.user.id,
+      assigned_to_id: fixtures.User.petya.id,
       tags: [fixtures.Tag.job.name, 'fix'].join(', '),
     };
 
@@ -59,9 +59,9 @@ describe('test tasks', () => {
     expect(task).toMatchObject({
       name: payload.name,
       description: payload.description,
-      creator: fixtures.User.user,
+      creator: fixtures.User.petya,
       status: fixtures.TaskStatus.taskStatusNew,
-      assignedTo: fixtures.User.user,
+      assignedTo: fixtures.User.petya,
       tags: [{ name: 'job' }, { name: 'fix' }],
     });
   });
@@ -99,7 +99,7 @@ describe('test tasks', () => {
     expect(task).toMatchObject({
       name: payload.name,
       description: payload.description,
-      creator: fixtures.User.user,
+      creator: fixtures.User.petya,
       status: fixtures.TaskStatus.taskStatusFinished,
       assignedTo: null,
       tags: [{ name: fixtures.Tag.buy.name }, { name: 'food' }],

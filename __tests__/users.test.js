@@ -18,7 +18,7 @@ describe('test users', () => {
 
     const res = await request(server)
       .post('/sessions')
-      .send({ email: 'user@mail.com', password: 'password' });
+      .send({ email: 'petya@mail.com', password: 'password' });
 
     authenticatedCookies = res.header['set-cookie'];
   });

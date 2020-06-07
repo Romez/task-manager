@@ -5,6 +5,7 @@ import * as paginate from 'koa-ctx-paginate';
 
 import encrypt from '../lib/secure';
 import { User } from '../entity';
+import userAuth from '../middlewares/userAuth';
 
 export default (router) => {
   router.get('newUser', '/users/new', (ctx) => {
@@ -27,11 +28,11 @@ export default (router) => {
     });
   });
 
-  router.get('editUser', '/users/:id/edit', async (ctx) => {
+  router.get('editUser', '/users/:id/edit', userAuth, async (ctx) => {
     const { id } = ctx.params;
     const user = await ctx.orm.getRepository(User).findOne({ id });
 
-    if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
+    if (user.id !== ctx.session.userId) {
       ctx.throw(403);
     }
 
@@ -80,12 +81,12 @@ export default (router) => {
     ctx.redirect(router.url('editUser', { id }));
   });
 
-  router.delete('deleteUser', '/users/:id', async (ctx) => {
+  router.delete('deleteUser', '/users/:id', userAuth, async (ctx) => {
     const { id } = ctx.params;
     const userRepository = ctx.orm.getRepository(User);
     const user = await userRepository.findOneOrFail({ id }, { relations: ['tasks'] });
 
-    if (ctx.state.currentUser.isGuest || user.id !== ctx.session.userId) {
+    if (user.id !== ctx.session.userId) {
       ctx.throw(403);
     }
 

@@ -5,6 +5,6 @@ items:
     name: 'buy milk'
     description: '3.2% fat'
     status: '@taskStatusNew'
-    creator: '@user'
-    assignedTo: '@user'
+    creator: '@petya'
+    assignedTo: '@petya'
     tags: null

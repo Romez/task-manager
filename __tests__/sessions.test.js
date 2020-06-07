@@ -23,7 +23,7 @@ describe('test session', () => {
   });
 
   it('should signIn', async () => {
-    const payload = { email: 'user@mail.com', password: 'password' };
+    const payload = { email: 'petya@mail.com', password: 'password' };
     const res = await request(server)
       .post('/sessions')
       .send(payload);

@@ -3,42 +3,27 @@ import _ from 'lodash';
 import i18next from 'i18next';
 
 import { TaskStatus } from '../entity';
+import userAuth from '../middlewares/userAuth';
 
 export default (router) => {
-  router.get('taskStatuses', '/task-statuses', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('taskStatuses', '/task-statuses', userAuth, async (ctx) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskStatuses = await statusRepository.find({ order: { isDefault: 'DESC' } });
 
     return ctx.render('task-statuses/index', { taskStatuses });
   });
 
-  router.get('newTaskStatus', '/task-statuses/new', (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('newTaskStatus', '/task-statuses/new', userAuth, (ctx) => {
     return ctx.render('task-statuses/new', { taskStatus: { isDefault: false } });
   });
 
-  router.get('editTaskStatus', '/task-statuses/:id/edit', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('editTaskStatus', '/task-statuses/:id/edit', userAuth, async (ctx) => {
     const { id } = ctx.params;
     const taskStatus = await ctx.orm.getRepository(TaskStatus).findOneOrFail({ id });
     return ctx.render('task-statuses/edit', { taskStatus });
   });
 
-  router.post('createTaskStatus', '/task-statuses', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.post('createTaskStatus', '/task-statuses', userAuth, async (ctx) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const { body } = ctx.request;
 
@@ -60,11 +45,7 @@ export default (router) => {
     return ctx.redirect(router.url('taskStatuses'));
   });
 
-  router.patch('updateTaskStatus', '/task-statuses/:id', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.patch('updateTaskStatus', '/task-statuses/:id', userAuth, async (ctx) => {
     const { id } = ctx.params;
     const { body } = ctx.request;
     const statusRepository = ctx.orm.getRepository(TaskStatus);
@@ -90,11 +71,7 @@ export default (router) => {
     return ctx.redirect(router.url('editTaskStatus', { id }));
   });
 
-  router.delete('removeTaskStatus', '/task-statuses/:id', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.delete('removeTaskStatus', '/task-statuses/:id', userAuth, async (ctx) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const { id } = ctx.params;
 

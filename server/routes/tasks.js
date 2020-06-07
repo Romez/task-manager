@@ -5,13 +5,10 @@ import i18next from 'i18next';
 import * as paginate from 'koa-ctx-paginate';
 
 import { TaskStatus, Task, User, Tag } from '../entity';
+import userAuth from '../middlewares/userAuth';
 
 export default (router) => {
-  router.get('tasks', '/tasks', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('tasks', '/tasks', userAuth, async (ctx) => {
     const where = {};
 
     if (ctx.query.status) {
@@ -71,11 +68,7 @@ export default (router) => {
     });
   });
 
-  router.get('newTask', '/tasks/new', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('newTask', '/tasks/new', userAuth, async (ctx) => {
     const statuses = await ctx.orm.getRepository(TaskStatus).find({ order: { isDefault: 'DESC' } });
     const users = await ctx.orm.getRepository(User).find();
 
@@ -86,11 +79,7 @@ export default (router) => {
     });
   });
 
-  router.get('showTask', '/tasks/:id', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('showTask', '/tasks/:id', userAuth, async (ctx) => {
     const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
       relations: ['status', 'assignedTo', 'creator', 'tags'],
     });
@@ -98,11 +87,7 @@ export default (router) => {
     return ctx.render('tasks/show', { task });
   });
 
-  router.get('editTask', '/tasks/:id/edit', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.get('editTask', '/tasks/:id/edit', userAuth, async (ctx) => {
     const task = await ctx.orm.getRepository(Task).findOneOrFail(ctx.params.id, {
       relations: ['status', 'assignedTo', 'creator', 'tags'],
     });
@@ -116,11 +101,7 @@ export default (router) => {
     });
   });
 
-  router.post('createTask', '/tasks', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.post('createTask', '/tasks', userAuth, async (ctx) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskRepository = ctx.orm.getRepository(Task);
     const userRepository = ctx.orm.getRepository(User);
@@ -173,11 +154,7 @@ export default (router) => {
     return ctx.redirect(router.url('tasks'));
   });
 
-  router.patch('updateTask', '/tasks/:id', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.patch('updateTask', '/tasks/:id', userAuth, async (ctx) => {
     const statusRepository = ctx.orm.getRepository(TaskStatus);
     const taskRepository = ctx.orm.getRepository(Task);
     const userRepository = ctx.orm.getRepository(User);
@@ -225,11 +202,7 @@ export default (router) => {
     return ctx.redirect(router.url('editTask', { id: ctx.params.id }));
   });
 
-  router.delete('deleteTask', '/tasks/:id', async (ctx) => {
-    if (ctx.state.currentUser.isGuest) {
-      return ctx.throw(403);
-    }
-
+  router.delete('deleteTask', '/tasks/:id', userAuth, async (ctx) => {
     const { id } = ctx.params;
 
     const taskRepository = ctx.orm.getRepository(Task);

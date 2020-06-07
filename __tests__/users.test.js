@@ -96,6 +96,26 @@ describe('test users', () => {
     expect(res).toHaveHTTPStatus(302);
   });
 
+  it('should not delete another user', async () => {
+    const { id, email } = fixtures.User.vasya;
+
+    const authRes = await request(server)
+      .post('/sessions')
+      .send({ email, password: 'password' });
+
+    const vasyaAuthCookies = authRes.header['set-cookie'];
+
+    const res = await request(server)
+      .post(`/users/${fixtures.User.petya.id}`)
+      .send({ _method: 'delete' })
+      .set({ cookie: vasyaAuthCookies });
+
+    const user = await connection.getRepository('User').findOne({ id });
+    expect(user).toBeTruthy();
+
+    expect(res).toHaveHTTPStatus(403);
+  });
+
   afterEach(async () => {
     await connection.close();
     server.close();

@@ -6,7 +6,7 @@ describe('test arequestpp', () => {
   let server;
 
   beforeEach(() => {
-    server = app().listen();
+    server = app({}).listen();
   });
 
   it('should runrequest app', async () => {

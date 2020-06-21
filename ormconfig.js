@@ -2,7 +2,7 @@ module.exports = [
   {
     name: 'development',
     type: 'sqlite',
-    database: `${__dirname}/database.sqlite`,
+    database: `${__dirname}/${process.env.DEV_DATABASE_NAME}`,
     synchronize: false,
     migrationsRun: true,
     logger: 'advanced-console',

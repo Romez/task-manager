@@ -3,11 +3,17 @@ const webpack = require('webpack');
 
 module.exports = {
   mode: process.env.NODE_ENV || 'development',
-  entry: ['./src/index.js'],
+  entry: {
+    main: ['./src/index'],
+    chat: ['./src/chat/index'],
+  },
   output: {
     path: path.join(__dirname, 'dist', 'assets'),
-    filename: 'main.js',
-    publicPath: '/assets',
+    filename: '[name].js',
+    publicPath: '/assets/',
+  },
+  externals: {
+    gon: 'gon',
   },
   devtool: 'inline-source-map',
   module: {

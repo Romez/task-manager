@@ -11,7 +11,7 @@ const IsUnique = (validationOptions) => (object, propertyName) => {
       async validate(value, args) {
         const repository = getRepository(args.targetName, process.env.NODE_ENV);
 
-        const entity = await repository.findOne({ [args.property]: value, deletedAt: null });
+        const entity = await repository.findOne({ [args.property]: value });
 
         if (!entity) {
           return true;

@@ -110,7 +110,7 @@ export default (router) => {
     const { body } = ctx.request;
 
     const status = await statusRepository.findOneOrFail(body.status_id);
-    const creator = await userRepository.findOneOrFail(ctx.session.userId);
+    const creator = ctx.state.currentUser;
     const assignedTo = body.assigned_to_id ? await userRepository.findOneOrFail(body.assigned_to_id) : null;
     const tags = body.tags
       .split(',')

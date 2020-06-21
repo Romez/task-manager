@@ -10,3 +10,7 @@ make install
 
 #### Run dev server
 make run
+
+###typeorm
+npm run typeorm migration:create -- -n name -c env 
+npm run typeorm migration:run -- -c env

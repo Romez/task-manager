@@ -7,6 +7,7 @@ module.exports = {
       brand: 'Tasks Manager',
       home: 'Home',
       users: 'Users',
+      chat: 'Chat',
       settings: 'Settings',
       taskStatuses: 'Task Statuses',
       tasks: 'Tasks',
@@ -132,6 +133,11 @@ module.exports = {
             isEmail: '"{{email}}" is not a valid email',
           },
         },
+      },
+    },
+    chat: {
+      index: {
+        title: 'Chat',
       },
     },
     flash: {

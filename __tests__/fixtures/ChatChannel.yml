@@ -1,0 +1,5 @@
+entity: ChatChannel
+items:
+  custom:
+    name: 'custom'
+    removable: true

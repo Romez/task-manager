@@ -24,6 +24,15 @@ deploy:
 make install:
 	npm ci
 
+dev-migration-revert:
+	npm run typeorm migration:revert -- -c development
+
+dev-migration-run:
+	npm run typeorm migration:run -- -c development
+
+prod-migration-run:
+	npm run typeorm migration:run -- -c production
+
 deploy:
 	git push heroku
 

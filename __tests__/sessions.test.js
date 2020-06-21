@@ -13,7 +13,7 @@ describe('test session', () => {
     connection = await createConnection(process.env.NODE_ENV);
     await loadFixtures(connection);
 
-    app = getApp(connection);
+    app = getApp({ connection });
     server = app.listen();
   });
 

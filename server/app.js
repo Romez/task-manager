@@ -1,3 +1,5 @@
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
 import path from 'path';
 import Koa from 'koa';
 import * as Sentry from '@sentry/node';
@@ -7,7 +9,7 @@ import serve from 'koa-static';
 import koaWebpack from 'koa-webpack';
 import methodOverride from 'koa-methodoverride';
 import bodyParser from 'koa-bodyparser';
-import session from 'koa-generic-session';
+import session, { MemoryStore } from 'koa-generic-session';
 import flash from 'koa-flash-simple';
 import koaLogger from 'koa-logger';
 import i18next from 'i18next';
@@ -15,10 +17,11 @@ import _ from 'lodash';
 import errorHandler from 'koa-better-error-handler';
 import koa404Handler from 'koa-404-handler';
 import { middleware as paginateMiddleware } from 'koa-ctx-paginate';
+import IO from 'koa-socket-2';
 
 import config from '../webpack.config';
 import addRoutes from './routes';
-import en from './locales/en';
+import en from '../locales/en';
 import { User, Guest } from './entity';
 
 const setupLocalization = () => {
@@ -29,7 +32,7 @@ const setupLocalization = () => {
   });
 };
 
-const createApp = (connection) => {
+const createApp = ({ connection, sessionStore = new MemoryStore(), io = new IO() }) => {
   const app = new Koa();
 
   app.context.onerror = errorHandler;
@@ -55,7 +58,7 @@ const createApp = (connection) => {
   app.context.orm = connection;
 
   app.keys = ['some secret hurr'];
-  app.use(session(app));
+  app.use(session({ store: sessionStore }));
   app.use(flash());
   app.use(async (ctx, next) => {
     let currentUser;
@@ -90,7 +93,8 @@ const createApp = (connection) => {
     app.use(serve(path.join(__dirname, '..', 'dist')));
   }
 
-  addRoutes(router);
+  io.attach(app);
+  addRoutes(router, io);
 
   router.get('/check/error', () => {
     throw new Error('Check error');

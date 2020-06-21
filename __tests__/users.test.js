@@ -14,7 +14,7 @@ describe('test users', () => {
   beforeEach(async () => {
     connection = await createConnection(process.env.NODE_ENV);
     fixtures = await loadFixtures(connection);
-    server = getApp(connection).listen();
+    server = getApp({ connection }).listen();
 
     const res = await request(server)
       .post('/sessions')

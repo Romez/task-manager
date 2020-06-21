@@ -1,3 +1,7 @@
 import 'bootstrap';
-import './_custom.scss';
+import 'regenerator-runtime/runtime';
+import 'core-js';
+
 import {} from 'jquery-ujs';
+
+import './_custom.scss';

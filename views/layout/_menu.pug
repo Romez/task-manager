@@ -1,0 +1,28 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light.mb-3
+  a.navbar-brand(href="/")=t('menu.brand')
+  button.navbar-toggler(data-toggle="collapse" data-target="#navbarSupportedContent")
+    span.navbar-toggler-icon
+  .collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(href=urlFor('users'))=t('menu.users')
+      li.nav-item
+        a.nav-link(href=urlFor('chat'))=t('menu.chat')
+      if (!currentUser.isGuest)
+        a.nav-link(href=urlFor('taskStatuses'))=t('menu.taskStatuses')
+        a.nav-link(href=urlFor('tasks'))=t('menu.tasks')
+
+    ul.navbar-nav
+      if (!currentUser.isGuest)
+        li.nav-item
+          a(
+            class="btn nav-link"
+            href=urlFor('session'),
+            data-method="delete",
+            rel="nofollow"
+           )= t('menu.signOut', currentUser)
+      else
+        li.nav-item
+          a.nav-link(href=urlFor('signIn'))=t('sessions.new.title')
+        li.nav-item
+          a.nav-link(href=urlFor('newUser'))=t('users.new.title')
